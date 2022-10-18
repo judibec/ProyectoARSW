@@ -9,11 +9,11 @@ public class Cuestionario {
     private int codigo;
     private ArrayList<Pregunta> preguntas;
 
-    public Cuestionario(String nombre,int codigo, Pregunta[] prgtas){
+    public Cuestionario(String nombre,int codigo, List<Pregunta> prgtas){
         this.nombre=nombre;
         this.codigo=codigo;
-        List<Pregunta> preguntatest = Arrays.asList(prgtas);
-        this.preguntas = new ArrayList<>(preguntatest);
+        //List<Pregunta> preguntatest = Arrays.asList(prgtas);
+        this.preguntas = new ArrayList<>(prgtas);
     }
 
     public Cuestionario(){}

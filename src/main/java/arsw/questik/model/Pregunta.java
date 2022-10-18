@@ -10,11 +10,11 @@ public class Pregunta {
     private String pregunta;
     private ArrayList<Respuesta> respuestas;
     
-    public Pregunta(int codigo, String pregunta, Respuesta[] rtas){
+    public Pregunta(int codigo, String pregunta, List<Respuesta> rtas){
         this.codigo=codigo;
         this.pregunta=pregunta;
-        List<Respuesta> respuestatest = Arrays.asList(rtas);
-        this.respuestas = new ArrayList<>(respuestatest);
+        //List<Respuesta> respuestatest = Arrays.asList(rtas);
+        this.respuestas = new ArrayList<>(rtas);
     }
 
     public Pregunta(){}
