@@ -1,0 +1,41 @@
+body{
+    font-family: 'Gloria Hallelujah', cursive;
+    background-color:#e4f4fd;
+}
+
+.poderes{
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+}
+
+.poder{
+    display: block;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+#cincuenta{
+    background-image: url('https://cdn.discordapp.com/attachments/364518078572265474/1032097490322858105/image.jpg');
+    background-repeat: no-repeat;
+    background-size: 50px 52px;
+    background-position: center;
+}
+
+#publico{
+    background-image: url('https://cdn.discordapp.com/attachments/364518078572265474/1032099543602434059/image_1.jpg');
+    background-repeat: no-repeat;
+    background-size: 50px 52px;
+    background-position: center;
+}
+
+#pordos{
+    background-image: url('https://cdn.discordapp.com/attachments/364518078572265474/1032101093796229171/unknown.png');
+    background-repeat: no-repeat;
+    background-size: 50px 52px;
+    background-position: center;
+}
+
+#titulo{
+    background-color: #8bd3f8;
+}
