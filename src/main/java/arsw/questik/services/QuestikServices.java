@@ -27,6 +27,7 @@ public class QuestikServices {
 
     public List<Cuestionario> getCuestionarios() throws QuestikNotFoundException {
         return questikPersistence.getCuestionarios();
+    }
 
     public Pregunta getPregunta(int codigo, int codigop) throws QuestikNotFoundException{
         return questikPersistence.getPregunta(codigo,codigop);
