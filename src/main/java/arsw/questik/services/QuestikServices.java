@@ -23,8 +23,8 @@ public class QuestikServices {
         return questikPersistence.getCuestionario(codigo);
     }
 
-    public ArrayList<Pregunta> getPregunta(int codigo) throws QuestikNotFoundException{
-        return questikPersistence.getPregunta(codigo);
+    public Pregunta getPregunta(int codigo, int codigop) throws QuestikNotFoundException{
+        return questikPersistence.getPregunta(codigo,codigop);
     }
 
     public ArrayList<Respuesta> getRespuestas(int codigoc, int codigop) throws QuestikNotFoundException{

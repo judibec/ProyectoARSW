@@ -10,7 +10,7 @@ import arsw.questik.model.Respuesta;
 public interface QuestikPersistence {
     public Set<Cuestionario> getCuestionario(int codigo) throws QuestikNotFoundException;
 
-    public ArrayList<Pregunta> getPregunta(int codigo) throws QuestikNotFoundException;
+    public Pregunta getPregunta(int codigo, int codigop) throws QuestikNotFoundException;
 
     public ArrayList<Respuesta> getRespuestas(int codigoc, int codigop) throws QuestikNotFoundException;
 }

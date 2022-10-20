@@ -28,10 +28,10 @@ public class QuestikController {
     @Autowired
     QuestikServices questikServices;
 
-    @RequestMapping(path = "/{codigo}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getPregunta(@PathVariable int codigo){
+    @RequestMapping(path = "/{codigo}/{codigop}/{bandera}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getPregunta(@PathVariable int codigo, @PathVariable int codigop, @PathVariable String bandera){
         try{
-            ArrayList<Pregunta> data = questikServices.getPregunta(codigo);
+            Pregunta data = questikServices.getPregunta(codigo,codigop);
             Gson gson = new Gson();
             return new ResponseEntity<>(gson.toJson(data), HttpStatus.ACCEPTED);
         }catch(QuestikNotFoundException e){
