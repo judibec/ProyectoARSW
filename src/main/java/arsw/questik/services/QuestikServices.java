@@ -1,5 +1,7 @@
 package arsw.questik.services;
 
+
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -23,11 +25,16 @@ public class QuestikServices {
         return questikPersistence.getCuestionario(codigo);
     }
 
+    public List<Cuestionario> getCuestionarios() throws QuestikNotFoundException {
+        return questikPersistence.getCuestionarios();
+    }
+
     public Pregunta getPregunta(int codigo, int codigop) throws QuestikNotFoundException{
         return questikPersistence.getPregunta(codigo,codigop);
     }
 
     public ArrayList<Respuesta> getRespuestas(int codigoc, int codigop) throws QuestikNotFoundException{
         return questikPersistence.getRespuestas(codigoc,codigop);
+
     }
 }
