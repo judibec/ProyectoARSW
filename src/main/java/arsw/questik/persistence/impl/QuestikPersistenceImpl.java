@@ -21,7 +21,7 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
     private Map<Integer, Cuestionario> questiks = new HashMap<>();
 
     public QuestikPersistenceImpl(){
-        Respuesta r1 = new Respuesta("prueba1", true);
+        Respuesta r1 = new Respuesta("prueba1 larga muy larga demasiado larga excesivamente larga nos quedamos sin ideas...larga", true);
         Respuesta r2 = new Respuesta("prueba2", false);
         Respuesta r3 = new Respuesta("prueba3", false);
         Respuesta r4 = new Respuesta("prueba4", false);
@@ -30,11 +30,21 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
         respuestas.add(r2);
         respuestas.add(r3);
         respuestas.add(r4);
-        Pregunta p = new Pregunta(123, "pregunta", respuestas);
+        Pregunta p = new Pregunta(1, "pregunta", respuestas,'M', 5);
         List<Pregunta> ps = new ArrayList<Pregunta>();
         ps.add(p);
+        //________________________________________
+        Respuesta r9 = new Respuesta("prueba9", true);
+        Respuesta r0 = new Respuesta("prueba0", false);
+        List<Respuesta> respuestas3 = new ArrayList<Respuesta>();
+        respuestas3.add(r9);
+        respuestas3.add(r0);
+        Pregunta p3 = new Pregunta(2, "pregunta2", respuestas3,'F', 5);
+        ps.add(p3);
         Cuestionario c = new Cuestionario("nombre", 12345, ps);
         questiks.put(12345, c);
+
+        //-------------------------------
 
         Respuesta r5 = new Respuesta("res1", true);
         Respuesta r6 = new Respuesta("res2", false);
@@ -45,13 +55,11 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
         respuestas2.add(r6);
         respuestas2.add(r7);
         respuestas2.add(r8);
-        Pregunta p2 = new Pregunta(456, "preg", respuestas2);
+        Pregunta p2 = new Pregunta(1, "preg", respuestas2,'M', 5);
         List<Pregunta> ps2 = new ArrayList<Pregunta>();
         ps2.add(p2);
         Cuestionario c2 = new Cuestionario("nombre2", 67890, ps2);
         questiks.put(67890, c2);
-
-
 
     }
 
@@ -63,13 +71,37 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
 
     @Override
     public List<Cuestionario> getCuestionarios() throws QuestikNotFoundException{
-        //List<Cuestionario> cues = questiks.values().stream().collect(Collectors.toList());
-        //List<String> nombres = new ArrayList<String>();
-        //for(Cuestionario i: cues){
-        //    nombres.add(i.getNombre());
-        //}
-        //return nombres;
         return questiks.values().stream().collect(Collectors.toList());
     }
+    
+    @Override
+    public Pregunta getPregunta(int codigo,int codigop) throws QuestikNotFoundException {
+        ArrayList<Pregunta> arraypreg = new ArrayList<>();
+        Pregunta pselec = new Pregunta();
+        if (questiks.containsKey(codigo)){
+            Cuestionario cselec = questiks.get(codigo);
+            arraypreg =  cselec.getPregunta();
+            for(Pregunta p: arraypreg){
+                if(p.getCodigo() == codigop){
+                    pselec = p;
+                }
+            }
+        }
+        return pselec;
+    }
+
+    @Override
+    public ArrayList<Respuesta> getRespuestas(int codigoc, int codigop) throws QuestikNotFoundException {
+        ArrayList<Respuesta> rselec = new ArrayList<>();
+        Cuestionario cselec = questiks.get(codigoc);
+        ArrayList<Pregunta> pselec =cselec.getPregunta();
+        for(Pregunta p:pselec){
+            if(p.getCodigo() == codigop){
+                rselec = p.getRespuestas();
+            }
+        }
+        return rselec;
+    }
+
     
 }
