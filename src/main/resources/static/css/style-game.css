@@ -4,8 +4,9 @@ body{
 }
 
 .poderes{
-    display: grid;
-    grid-template-columns: 33% 33% 33%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .poder{
@@ -38,4 +39,31 @@ body{
 
 #titulo{
     background-color: #8bd3f8;
+}
+
+#pregunta{
+    text-align: center; 
+}
+
+#respuestas{
+    height: 30vh;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+}
+
+#btn-respuesta{
+    border: 1px solid #2e518b;
+    padding: 5px;
+    background-color: #2e518b; 
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 50px;
+    font-family: 'Gloria Hallelujah', cursive;
+    transition: all 1s ease;
+}
+
+#btn-respuesta:hover{
+    background: #318aac;
+    color: #fff !important;
 }
