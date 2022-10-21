@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import arsw.questik.model.Cuestionario;
 import arsw.questik.model.Pregunta;
 import arsw.questik.model.Respuesta;
+import arsw.questik.model.Usuario;
 import arsw.questik.persistence.QuestikNotFoundException;
 import arsw.questik.persistence.QuestikPersistence;
 
@@ -20,6 +21,7 @@ import arsw.questik.persistence.QuestikPersistence;
 public class QuestikPersistenceImpl implements QuestikPersistence{
 
     private Map<Integer, Cuestionario> questiks = new HashMap<>();
+    private ArrayList<Usuario> usuarios = new ArrayList<>();
     private int cuestSelec;
 
     public QuestikPersistenceImpl(){
@@ -138,6 +140,17 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
     @Override
     public int getCodCues() throws QuestikNotFoundException {
         return cuestSelec;
+    }
+
+    @Override
+    public boolean revisarCues(String nickname, int codigo) throws QuestikNotFoundException {
+        boolean existe = false;
+        if (questiks.containsKey(codigo)){
+            Usuario usuario = new Usuario(codigo, nickname, 0);
+            usuarios.add(usuario);
+            existe = true;
+        }
+        return existe;
     }
 
     

@@ -50,4 +50,8 @@ public class QuestikServices {
     public int getCodCues() throws QuestikNotFoundException{
         return questikPersistence.getCodCues();
     }
+
+    public boolean revisarCues(String nickname,int codigo) throws QuestikNotFoundException{
+        return questikPersistence.revisarCues(nickname,codigo);
+    }
 }

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Questik-Game</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/style-index.css">
+        <script src="/webjars/jquery/jquery.min.js"></script>
+    </head>
+    <body>
+        <div id="titulo">
+            <center><h1>Questik?</h1></center>
+        </div>
+        <div class="entradaNick">
+            <h2>Nickname</h2>
+            <input id="nickname" required>
+        </div>
+        <br>
+        <div class="entradaCod">
+            <h2>Codigo</h2>
+            <input id="codigo" type="number" required>
+        </div>
+        <br>
+        <div id="unirse">
+            <button type="submit" onclick="app.revisarCues()">ENTRAR</button>
+        </div>
+    </body>
+    <script src="js/app.js"></script>
+    <script src="js/apiclient.js"></script>
+</html>

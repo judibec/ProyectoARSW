@@ -21,4 +21,6 @@ public interface QuestikPersistence {
     public void guardarCodigoCues(String codigoc) throws QuestikNotFoundException;
 
     public int getCodCues() throws QuestikNotFoundException;
+
+    public boolean revisarCues(String nickname, int codigo) throws QuestikNotFoundException;
 }

@@ -108,4 +108,16 @@ public class QuestikController {
         }
     }
 
+    @RequestMapping(path = "/{nickname}/{codigo}/{bandera1}/{bandera2}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> revisarCues(@PathVariable String nickname, @PathVariable int codigo){
+        try{
+            boolean data = questikServices.revisarCues(nickname,codigo);
+            Gson gson = new Gson();
+            return new ResponseEntity<>(gson.toJson(data), HttpStatus.ACCEPTED);
+        }catch(QuestikNotFoundException e){
+            Logger.getLogger(QuestikController.class.getName()).log(Level.SEVERE, null, e);
+            return new ResponseEntity<>("Error",HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

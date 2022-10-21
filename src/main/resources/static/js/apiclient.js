@@ -21,6 +21,12 @@ var apiclient = (function(){
             callback(
                 JSON.parse($.ajax({type: 'GET', url: 'questiks/cuestionario', async: false}).responseText)
             )
+        },
+
+        revisarCues: function(nickname,codigo,callback){
+            callback(
+                JSON.parse($.ajax({type: 'GET', url: 'questiks/'+nickname+'/'+codigo+'/bandera1/bandera2', async: false}).responseText)
+            )
         }
     }
 })();

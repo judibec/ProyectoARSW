@@ -77,11 +77,28 @@ var app = (function(){
         getPregunta();
     }
 
+    function revisarCues(){
+        var nickname = $("#nickname").val();
+        var codigoIngresado = $("#codigo").val();
+        // alert(nickname+" "+codigoIngresado);
+        apiclient.revisarCues(nickname,codigoIngresado,validarCues);
+    }
+
+    var validarCues = function(data){
+        var existe = data
+        if(existe === true){
+            window.location="start.html"
+        }else{
+            alert("no existe el cuestionario")
+        }
+    }
+
     return{
         getPregunta:getPregunta,
         siguientePregunta:siguientePregunta,
         getNombres: getNombres,
         entrarCues: entrarCues,
-        revisarResp:revisarResp
+        revisarResp:revisarResp,
+        revisarCues:revisarCues
     }
 })();
