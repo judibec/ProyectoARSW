@@ -22,6 +22,15 @@ body{
     text-transform: uppercase; 
     font-family: 'Helvetica', sans-serif; 
     border-radius: 50px; 
-    
-
     }
+
+    .botonsalir {
+      border: 1px solid #e11212;
+      padding: 5px;
+      background-color: #c74f41; 
+      color: #ffffff;
+      text-decoration: none;
+      font-size: large;
+      font-family: 'Helvetica', sans-serif; 
+      border-radius: 10px; 
+      }
