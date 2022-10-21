@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import arsw.questik.persistence.QuestikPersistence;
 public class QuestikPersistenceImpl implements QuestikPersistence{
 
     private Map<Integer, Cuestionario> questiks = new HashMap<>();
+    private int cuestSelec;
 
     public QuestikPersistenceImpl(){
         Respuesta r1 = new Respuesta("prueba1 larga muy larga demasiado larga excesivamente larga nos quedamos sin ideas...larga", true);
@@ -39,7 +41,7 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
         List<Respuesta> respuestas3 = new ArrayList<Respuesta>();
         respuestas3.add(r9);
         respuestas3.add(r0);
-        Pregunta p3 = new Pregunta(2, "pregunta2", respuestas3,'F', 5);
+        Pregunta p3 = new Pregunta(2, "pregunta2", respuestas3,'F', 10);
         ps.add(p3);
         Cuestionario c = new Cuestionario("nombre", 12345, ps);
         questiks.put(12345, c);
@@ -69,13 +71,27 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
         return null;
     }
 
+    // @Override
+    // public List<Cuestionario> getCuestionarios() throws QuestikNotFoundException{
+    //     return questiks.values().stream().collect(Collectors.toList());
+    // }
+
     @Override
-    public List<Cuestionario> getCuestionarios() throws QuestikNotFoundException{
-        return questiks.values().stream().collect(Collectors.toList());
+    public ArrayList<Tuple> getCuestionarios() throws QuestikNotFoundException{
+        ArrayList<Tuple> tuples = new ArrayList<>();
+        // System.out.println(questiks.values().stream().collect(Collectors.toList()).toString());        
+        Set<Integer> keys = questiks.keySet();
+        for(Integer key: keys){
+            String nombre = questiks.get(key).getNombre();
+            int codigo = questiks.get(key).getCodigo();
+            Tuple tuple = new Tuple<>(codigo, nombre);
+            tuples.add(tuple);
+        }
+        return tuples;
     }
     
     @Override
-    public Pregunta getPregunta(int codigo,int codigop) throws QuestikNotFoundException {
+    public Pregunta getPregunta(int codigo,int codigop) throws QuestikNotFoundException, InterruptedException {
         ArrayList<Pregunta> arraypreg = new ArrayList<>();
         Pregunta pselec = new Pregunta();
         if (questiks.containsKey(codigo)){
@@ -90,6 +106,16 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
         return pselec;
     }
 
+    // public void iniciarHilo(int segundos) throws InterruptedException{
+    //     Tiempo hilo = new Tiempo();
+    //     hilo.start();
+    //     long startTime = System.nanoTime();
+	// 	TimeUnit.SECONDS.sleep(segundos);
+	// 	long endTime = System.nanoTime();
+	// 	long timeElapse = endTime-startTime;
+    //     hilo.suspender();
+    // }
+
     @Override
     public ArrayList<Respuesta> getRespuestas(int codigoc, int codigop) throws QuestikNotFoundException {
         ArrayList<Respuesta> rselec = new ArrayList<>();
@@ -101,6 +127,17 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
             }
         }
         return rselec;
+    }
+
+    @Override
+    public void guardarCodigoCues(String codigoc) throws QuestikNotFoundException {
+        this.cuestSelec = Integer.valueOf(codigoc);
+        
+    }
+
+    @Override
+    public int getCodCues() throws QuestikNotFoundException {
+        return cuestSelec;
     }
 
     
