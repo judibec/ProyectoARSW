@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"arsw.questik"})
+@ComponentScan(basePackages = {"arsw"})
 public class QuestikAPIApplication {
     public static void main(String[] args){
         SpringApplication.run(QuestikAPIApplication.class,args);

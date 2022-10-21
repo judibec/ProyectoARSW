@@ -13,6 +13,7 @@ import arsw.questik.model.Pregunta;
 import arsw.questik.model.Respuesta;
 import arsw.questik.persistence.QuestikNotFoundException;
 import arsw.questik.persistence.QuestikPersistence;
+import arsw.questik.persistence.impl.Tuple;
 
 
 @Service
@@ -25,16 +26,28 @@ public class QuestikServices {
         return questikPersistence.getCuestionario(codigo);
     }
 
-    public List<Cuestionario> getCuestionarios() throws QuestikNotFoundException {
+    // public List<Cuestionario> getCuestionarios() throws QuestikNotFoundException {
+    //     return questikPersistence.getCuestionarios();
+    // }
+
+    public ArrayList<Tuple> getCuestionarios() throws QuestikNotFoundException {
         return questikPersistence.getCuestionarios();
     }
 
-    public Pregunta getPregunta(int codigo, int codigop) throws QuestikNotFoundException{
+    public Pregunta getPregunta(int codigo, int codigop) throws QuestikNotFoundException, InterruptedException{
         return questikPersistence.getPregunta(codigo,codigop);
     }
 
     public ArrayList<Respuesta> getRespuestas(int codigoc, int codigop) throws QuestikNotFoundException{
         return questikPersistence.getRespuestas(codigoc,codigop);
 
+    }
+
+    public void guardarCodigoCues(String codigoc) throws QuestikNotFoundException{
+        questikPersistence.guardarCodigoCues(codigoc);
+    }
+
+    public int getCodCues() throws QuestikNotFoundException{
+        return questikPersistence.getCodCues();
     }
 }
