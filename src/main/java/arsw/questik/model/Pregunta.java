@@ -9,12 +9,16 @@ public class Pregunta {
     private int codigo;
     private String pregunta;
     private ArrayList<Respuesta> respuestas;
-    
-    public Pregunta(int codigo, String pregunta, List<Respuesta> rtas){
+    private char tipo;
+    private int tiempo;
+
+    public Pregunta(int codigo, String pregunta, List<Respuesta> rtas, char tipo, int tiempo){
         this.codigo=codigo;
         this.pregunta=pregunta;
         //List<Respuesta> respuestatest = Arrays.asList(rtas);
         this.respuestas = new ArrayList<>(rtas);
+        this.tipo = tipo;
+        this.tiempo= tiempo;
     }
 
     public Pregunta(){}
@@ -41,6 +45,22 @@ public class Pregunta {
 
     public ArrayList<Respuesta> getRespuestas() {
         return respuestas;
+    }
+
+    public char getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(char tipo) {
+        this.tipo = tipo;
+    }
+
+    public int getTiempo() {
+        return tiempo;
+    }
+
+    public void setTiempo(int tiempo) {
+        this.tiempo = tiempo;
     }
 
 }
