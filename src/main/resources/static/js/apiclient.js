@@ -7,10 +7,21 @@ var apiclient = (function(){
             )
         },
         
-        getPreguntaCodigo: function(codPreg,callback){
+        getPreguntaCodigo: function(codCues,codPreg,callback){
             callback(
-                JSON.parse($.ajax({type: 'GET', url: 'questiks/12345/'+codPreg+'/'+'preg', async: false}).responseText)
+                JSON.parse($.ajax({type: 'GET', url: 'questiks/'+codCues+'/'+codPreg+'/preg', async: false}).responseText)
             )},
+
+        guardarCodigoCues: function(codCues){
+            var codigo = JSON.stringify(codCues)
+            $.ajax({type: 'POST', url: 'questiks/', data: codigo, contentType: "application/json" })
+        },
+
+        getCodCues: function(callback){
+            callback(
+                JSON.parse($.ajax({type: 'GET', url: 'questiks/cuestionario', async: false}).responseText)
+            )
+        }
     }
 })();
 
