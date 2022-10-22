@@ -20,7 +20,8 @@ var app = (function(){
     var codCues = 0;
     function entrarCues(codigoCues){
         apiclient.guardarCodigoCues(codigoCues);
-        window.location="game.html"
+        sessionStorage.setItem("codigoIngresadoV",codigoCues);
+        window.location="admin_wait.html"
     }
 
     // var redirigir = function(){
@@ -77,9 +78,11 @@ var app = (function(){
         getPregunta();
     }
 
+    var nickname;
+    var codigoIngresado;
     function revisarCues(){
-        var nickname = $("#nickname").val();
-        var codigoIngresado = $("#codigo").val();
+        nickname = $("#nickname").val();
+        codigoIngresado = $("#codigo").val();
         nickname.oninvalid = function(event){
             event.target.setCustomValidity('Debe ingresar nickname')
         }
@@ -96,10 +99,16 @@ var app = (function(){
     var validarCues = function(data){
         var existe = data
         if(existe === true){
-            window.location="start.html"
+            sessionStorage.setItem("codigoIngresadoV",$("#codigo").val());
+            window.location="user_wait.html"
         }else{
             alert("no existe el cuestionario")
         }
+    }
+
+    function cargarWait(){
+        apiclient.getUsuarios()
+        $("#codigoJugar").append(sessionStorage.getItem("codigoIngresadoV"))
     }
 
     return{
@@ -108,6 +117,7 @@ var app = (function(){
         getNombres: getNombres,
         entrarCues: entrarCues,
         revisarResp:revisarResp,
-        revisarCues:revisarCues
+        revisarCues:revisarCues,
+        cargarWait:cargarWait
     }
 })();

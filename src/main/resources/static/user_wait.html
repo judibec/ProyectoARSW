@@ -4,18 +4,20 @@
         <script src="/webjars/jquery/jquery.min.js"></script>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="css/style-wait.css">
         <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
 
     </head>
-    <body>
+    <body onload="app.cargarWait()">
         <div id="title">
             <h1 class="center-part">Questik?</h1>
         </div>
-            <a class="botonsalir" href="inicio.html" target="_self">Salir</a>
-            <h3><strong><center>12345</center></strong></h3>
-            <div class="foo"> 
+        <a class="botonsalir" href="index.html" target="_self">Salir</a>
+        <center><h3 id="codigoJugar"></h3></center>
+        <div class="foo" id="usuarios">
         </div>
-    <h6><strong><center>El juego iniciara pronto</center></strong></h6>
+        <h6><center>El juego iniciara pronto</center></h6>
     </body>
+    <script src="js/app.js"></script>
+    <script src="js/apiclient.js"></script>
 </html>
