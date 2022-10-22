@@ -21,6 +21,17 @@ var apiclient = (function(){
             callback(
                 JSON.parse($.ajax({type: 'GET', url: 'questiks/cuestionario', async: false}).responseText)
             )
+        },
+
+        setRtasSelec: function(rta){
+            var res = JSON.stringify(rta)
+            $.ajax({type: 'POST', url: 'questiks/'+rta, data: res, contentType: "application/json" })
+        },
+
+        ayudaPubl: function(callback){
+            callback(
+                JSON.parse($.ajax({type: 'GET', url: 'questiksTemp/', async: false}).responseText)
+            )
         }
     }
 })();

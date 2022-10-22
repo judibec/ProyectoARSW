@@ -1,6 +1,7 @@
 package arsw.questik.controller;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -64,6 +65,7 @@ public class QuestikController {
     @RequestMapping(path = "/{codigo}/{codigop}/{bandera}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPregunta(@PathVariable int codigo, @PathVariable int codigop, @PathVariable String bandera){
         try{
+            questikServices.cleanRtasSelec();
             Pregunta data = questikServices.getPregunta(codigo,codigop);
             Gson gson = new Gson();
             return new ResponseEntity<>(gson.toJson(data), HttpStatus.ACCEPTED);
@@ -107,5 +109,28 @@ public class QuestikController {
             return new ResponseEntity<>("Error",HttpStatus.NOT_FOUND);
         }
     }
+
+    @RequestMapping(path = "/{bandera}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> setRtasSelec(@RequestBody String rta){
+        try{
+            questikServices.setRtasSelec(rta);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }catch(QuestikNotFoundException e){
+            Logger.getLogger(QuestikController.class.getName()).log(Level.SEVERE, null, e);
+            return new ResponseEntity<>("Error",HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // @RequestMapping(value = "/questiksTemp", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    // public ResponseEntity<?> getRtasSelec(){
+    //     try{
+    //         ConcurrentHashMap<String, Integer> rtas = questikServices.getRtasSelec();
+    //         Gson gson = new Gson();
+    //         System.out.println(rtas.toString());
+    //         return new ResponseEntity<>(gson.toJson(rtas), HttpStatus.ACCEPTED);
+    //     }catch(QuestikNotFoundException e){
+    //         return new ResponseEntity<>("Error",HttpStatus.NOT_FOUND);
+    //     }
+    // }
 
 }

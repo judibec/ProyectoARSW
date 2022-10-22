@@ -8,8 +8,6 @@ import arsw.questik.persistence.impl.QuestikPersistenceImpl;
 
 public class main {
     public static void main(String[] args) throws QuestikNotFoundException{
-        
-
     }
     
 }
