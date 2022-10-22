@@ -4,6 +4,7 @@ package arsw.questik.services;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,5 +50,17 @@ public class QuestikServices {
 
     public int getCodCues() throws QuestikNotFoundException{
         return questikPersistence.getCodCues();
+    }
+
+    public void setRtasSelec(String rta) throws QuestikNotFoundException{
+        questikPersistence.setRtasSelec(rta);
+    }
+
+    public void cleanRtasSelec() throws QuestikNotFoundException{
+        questikPersistence.cleanRtasSelec();
+    }
+
+    public ConcurrentHashMap<String, Integer> getRtasSelec() throws QuestikNotFoundException {
+        return questikPersistence.getRtasSelec();
     }
 }

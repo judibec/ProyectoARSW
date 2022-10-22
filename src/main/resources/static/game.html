@@ -7,6 +7,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/style-game.css">
         <script src="/webjars/jquery/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
 
     </head>
     <body onload="app.getPregunta()">
@@ -19,10 +20,15 @@
         </div>
         <div class = "poderes">
             <button class = "poder" id = "cincuenta"></button>
-            <button class = "poder" id = "publico"></button>
+            <button class = "poder" id = "publico" onclick="app.ayudaPubl()"></button>
             <button class = "poder" id = "pordos"></button>
         </div>
         <button class="siguiente" onclick="app.siguientePregunta()">siguiente</button>
+        <div style="height: 300px">
+            <canvas id="grafica"></canvas>
+        </div>
+        
+        
     </body>
     <script src="js/app.js"></script>
     <script src="js/apiclient.js"></script>
