@@ -80,8 +80,17 @@ var app = (function(){
     function revisarCues(){
         var nickname = $("#nickname").val();
         var codigoIngresado = $("#codigo").val();
-        // alert(nickname+" "+codigoIngresado);
-        apiclient.revisarCues(nickname,codigoIngresado,validarCues);
+        nickname.oninvalid = function(event){
+            event.target.setCustomValidity('Debe ingresar nickname')
+        }
+        codigoIngresado.oninvalid = function(event){
+            event.target.setCustomValidity('Debe ingresar codigo')
+        }
+        if(nickname && codigoIngresado){
+            apiclient.revisarCues(nickname,codigoIngresado,validarCues);
+        }
+        
+        
     }
 
     var validarCues = function(data){

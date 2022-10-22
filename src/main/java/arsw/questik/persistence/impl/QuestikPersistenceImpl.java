@@ -150,6 +150,7 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
             usuarios.add(usuario);
             existe = true;
         }
+        System.out.println(usuarios.size());
         return existe;
     }
 
