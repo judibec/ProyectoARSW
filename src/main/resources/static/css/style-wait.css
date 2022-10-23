@@ -36,8 +36,8 @@ body{
   float: right;
 }
 
-.foo { 
-  /* float: left;  */
+/* .foo { 
+  //float: left; 
   width: 95%; 
   height: 100%; 
   margin: 5px; 
@@ -48,4 +48,27 @@ body{
   align-content: center;
   text-align: center;
   position:relative;
-} 
+}  */
+
+table, th, td {
+  border: 1px solid black;
+  margin:auto;
+  text-align: center;
+}
+
+tr{
+  background-color: white;
+}
+
+.eliminar {
+  border-radius:15px;
+  font-family: 'Gloria Hallelujah', cursive;
+  cursor:pointer;
+  background: rgba(0,0,0,0);
+  transition: all 1s ease;
+}
+
+.eliminar:hover {
+  background: #318aac;
+  color: #fff !important;
+}

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -20,6 +21,7 @@ import arsw.questik.persistence.QuestikPersistence;
 @Service
 public class QuestikPersistenceImpl implements QuestikPersistence{
 
+    private ConcurrentHashMap<String, Integer> rtasSelec = new ConcurrentHashMap<>();
     private Map<Integer, Cuestionario> questiks = new HashMap<>();
     private ArrayList<Usuario> usuarios = new ArrayList<>();
     private int cuestSelec;
@@ -45,6 +47,19 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
         respuestas3.add(r0);
         Pregunta p3 = new Pregunta(2, "pregunta2", respuestas3,'F', 10);
         ps.add(p3);
+        //________________________________________
+        Respuesta r10 = new Respuesta("BECERRA", false);
+        Respuesta r11 = new Respuesta("ROZO", true);
+        Respuesta r12 = new Respuesta("ESTEBAN", false);
+        Respuesta r13 = new Respuesta("A", false);
+        List<Respuesta> respuestas4 = new ArrayList<Respuesta>();
+        respuestas4.add(r10);
+        respuestas4.add(r11);
+        respuestas4.add(r12);
+        respuestas4.add(r13);
+        Pregunta p4 = new Pregunta(3, "Hola", respuestas4,'M', 15);
+        ps.add(p4);
+
         Cuestionario c = new Cuestionario("nombre", 12345, ps);
         questiks.put(12345, c);
 
@@ -150,8 +165,43 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
             usuarios.add(usuario);
             existe = true;
         }
-        System.out.println(usuarios.size());
+        // System.out.println(usuarios.size());
         return existe;
+    }
+
+    @Override
+    public void setRtasSelec(String rta) throws QuestikNotFoundException {
+        if(rtasSelec.containsKey(rta)){
+            int cont = rtasSelec.get(rta);
+            cont ++;
+            rtasSelec.put(rta, cont);
+        }
+        else{
+            rtasSelec.put(rta, 1);
+        }
+        
+    }
+
+    @Override
+    public void cleanRtasSelec() throws QuestikNotFoundException{
+        rtasSelec.clear();
+    }
+
+    @Override
+    public ConcurrentHashMap<String, Integer> getRtasSelec() throws QuestikNotFoundException{
+        return rtasSelec;
+    }
+
+    @Override
+    public ArrayList<Tuple> getUsurios() throws QuestikNotFoundException {
+        ArrayList<Tuple> usuariosIn = new ArrayList<>();
+        for(Usuario usuario:usuarios){
+            String nickname = usuario.getNickname();
+            int puntaje = usuario.getPuntaje();
+            Tuple tuple = new Tuple<>(nickname, puntaje);
+            usuariosIn.add(tuple);
+        }
+        return usuariosIn;
     }
 
     

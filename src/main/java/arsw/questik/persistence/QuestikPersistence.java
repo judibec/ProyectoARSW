@@ -3,6 +3,7 @@ package arsw.questik.persistence;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import arsw.questik.model.Cuestionario;
 import arsw.questik.model.Pregunta;
@@ -23,4 +24,13 @@ public interface QuestikPersistence {
     public int getCodCues() throws QuestikNotFoundException;
 
     public boolean revisarCues(String nickname, int codigo) throws QuestikNotFoundException;
+
+    public void setRtasSelec(String rta) throws QuestikNotFoundException;
+
+    public void cleanRtasSelec() throws QuestikNotFoundException;
+
+    public ConcurrentHashMap<String, Integer> getRtasSelec() throws QuestikNotFoundException;
+
+    public ArrayList<Tuple> getUsurios() throws QuestikNotFoundException;
+
 }

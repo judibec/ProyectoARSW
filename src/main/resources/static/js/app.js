@@ -1,5 +1,8 @@
 var apiclient = apiclient;
 var app = (function(){
+    var respuestas;
+    var ejex;
+    var ejey = [];
     function getNombres(){
         apiclient.getCuestionariosNombres(poblarTabla);
     }
@@ -18,6 +21,7 @@ var app = (function(){
     }
     
     var codCues = 0;
+
     function entrarCues(codigoCues){
         apiclient.guardarCodigoCues(codigoCues);
         sessionStorage.setItem("codigoIngresadoV",codigoCues);
@@ -36,21 +40,25 @@ var app = (function(){
     }
 
     var funIntermedia = function(data){
-        console.log(data)
         codCues=data
         apiclient.getPreguntaCodigo(codCues,codPreg,crearTabla);
     }
 
     var crearTabla = function(data){
+        ejex = [];
         // datanew.map((elemento) =>{
-            console.log(data)
             if(data.pregunta != undefined){
                 document.getElementById("pregunta").innerHTML = data.pregunta;
                 for(let i=0;i<data.respuestas.length;i++){
-                    $("#respuestas").append($("<button id = 'btn-respuesta' onclick='app.revisarResp("+data.respuestas[i].correcta+")'>"+data.respuestas[i].respuesta+"</button>"))
+                    ejex.push('"' + data.respuestas[i].respuesta + '"')
+                    ejey.push(0)
+                    respuestas = data.respuestas;
+                    res = JSON.stringify(data.respuestas[i].respuesta)
+                    $("#respuestas").append($("<button id = 'btn-respuesta' class = 'btn-respuesta' onclick='app.revisarResp("+data.respuestas[i].correcta + "," + res +")'>"+data.respuestas[i].respuesta+"</button>"))
                 }
-                console.log(data.tiempo)
-                setTimeout(finTiempo,(data.tiempo)*1000)
+                
+
+                //setTimeout(finTiempo,(data.tiempo)*1000)
             }
         // });
     }
@@ -59,12 +67,14 @@ var app = (function(){
         siguientePregunta()
     }
 
-    function revisarResp(booleano){
+    function revisarResp(booleano, str){
+        $('.btn-respuesta').attr('disabled', true);
         if(booleano === true){
             console.log("tabn")
         }else{
             console.log("tamal")
         }
+        setRtasSelec(str)
     }
 
     function clean(){
@@ -100,15 +110,79 @@ var app = (function(){
         var existe = data
         if(existe === true){
             sessionStorage.setItem("codigoIngresadoV",$("#codigo").val());
-            window.location="user_wait.html"
+            window.location="admin_wait.html"
         }else{
             alert("no existe el cuestionario")
         }
     }
 
     function cargarWait(){
-        apiclient.getUsuarios()
         $("#codigoJugar").append(sessionStorage.getItem("codigoIngresadoV"))
+        apiclient.getUsuarios(usuarios)
+    }
+
+    var usuarios = function(data){
+            const datanew = data.map((elemento) =>{
+                return{
+                    nickname: elemento.o1,
+                    puntaje : elemento.o2
+                }
+            });
+            datanew.map((element) => {
+                $("#usuarios > tbody:last").append($("<tr><td>" + element.nickname + "</td><td>" + 
+                "<button id=" + element.nickname + " class= 'eliminar' onclick=app.borrarUsu("+element.nickname+")>Eliminar</button>" + "</td>"));
+            });
+    }
+
+    function borrarUsu(nick){
+        alert("xd")
+    }
+
+    function setRtasSelec(str){
+        apiclient.setRtasSelec(str);
+    }
+
+    function ayudaPubl(){
+        apiclient.ayudaPubl(ver)
+    }
+
+    var ver = function(data){
+        //console.log(data)
+        for(let i = 0; i<data.length; i++){
+            if(ejex.includes(data[i].o1.toString())){
+                var indice = ejex.indexOf(data[i].o1.toString())
+                ejey[indice] = data[i].o2;
+            }
+        }
+        console.log(ejey)
+        const grafica = document.querySelector("#grafica");
+        const grafico = {
+            label: "prueba",
+            data: ejey,
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)', 
+            borderWidth: 1
+        }
+        new Chart(grafica, {
+            type: 'bar',
+            data: {
+                labels: ejex,
+                datasets: [
+                    grafico
+                ]
+            },
+            options: {
+                responsive: true, 
+                maintainAspectRatio: false,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }],
+                },
+            }
+        });
     }
 
     return{
@@ -118,6 +192,8 @@ var app = (function(){
         entrarCues: entrarCues,
         revisarResp:revisarResp,
         revisarCues:revisarCues,
-        cargarWait:cargarWait
+        cargarWait:cargarWait,
+        ayudaPubl: ayudaPubl,
+        borrarUsu:borrarUsu
     }
 })();
