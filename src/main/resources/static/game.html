@@ -11,6 +11,8 @@
 
     </head>
     <body onload="app.getPregunta()">
+
+        </div>
         <div id="titulo">
             <center><h1>Questik?</h1></center>
         </div>
@@ -20,12 +22,15 @@
         </div>
         <div class = "poderes">
             <button class = "poder" id = "cincuenta"></button>
-            <button class = "poder" id = "publico" onclick="app.ayudaPubl()"></button>
+            <button class = "poder" id = "publico" onclick="app.prueba()"></button>
             <button class = "poder" id = "pordos"></button>
         </div>
         <button class="siguiente" onclick="app.siguientePregunta()">siguiente</button>
-        <div style="height: 300px">
+        <div id="grafic" style="height: 300px">
             <canvas id="grafica"></canvas>
+        </div>
+        <div>
+            <h2 id="crono"></h2>
         </div>
         
         

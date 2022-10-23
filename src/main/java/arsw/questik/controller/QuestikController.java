@@ -121,16 +121,4 @@ public class QuestikController {
         }
     }
 
-    // @RequestMapping(value = "/questiksTemp", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    // public ResponseEntity<?> getRtasSelec(){
-    //     try{
-    //         ConcurrentHashMap<String, Integer> rtas = questikServices.getRtasSelec();
-    //         Gson gson = new Gson();
-    //         System.out.println(rtas.toString());
-    //         return new ResponseEntity<>(gson.toJson(rtas), HttpStatus.ACCEPTED);
-    //     }catch(QuestikNotFoundException e){
-    //         return new ResponseEntity<>("Error",HttpStatus.NOT_FOUND);
-    //     }
-    // }
-
 }

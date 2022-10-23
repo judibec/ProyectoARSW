@@ -1,8 +1,13 @@
 var apiclient = apiclient;
 var app = (function(){
+    var intervalo;
+    var restar = 0;
     var respuestas;
     var ejex;
     var ejey = [];
+    var codPreg = 1;
+    var codCues = 0;
+
     function getNombres(){
         apiclient.getCuestionariosNombres(poblarTabla);
     }
@@ -20,9 +25,10 @@ var app = (function(){
         });
     }
     
-    var codCues = 0;
     function entrarCues(codigoCues){
         apiclient.guardarCodigoCues(codigoCues);
+        sessionStorage.setItem("codigoIngresadoV", codigoCues);
+        sessionStorage.setItem('codPreg', codPreg)
         window.location="game.html"
     }
 
@@ -32,17 +38,23 @@ var app = (function(){
     // }
 
     
-    var codPreg = 1;
     function getPregunta(){
+        
         apiclient.getCodCues(funIntermedia);
     }
 
     var funIntermedia = function(data){
         codCues=data
-        apiclient.getPreguntaCodigo(codCues,codPreg,crearTabla);
+        console.log(sessionStorage.getItem('codPreg'))
+        apiclient.getPreguntaCodigo(codCues, sessionStorage.getItem('codPreg') ,crearTabla);
     }
 
     var crearTabla = function(data){
+        //intervalo = setInterval(cronometro, 1000, data.tiempo - 1)
+        // intervalo = setInterval(() => {
+        //     document.getElementById('crono').innerHTML = data.tiempo  + restar;
+        //     restar -= 1;
+        // }, 1000)
         ejex = [];
         // datanew.map((elemento) =>{
             if(data.pregunta != undefined){
@@ -52,21 +64,40 @@ var app = (function(){
                     ejey.push(0)
                     respuestas = data.respuestas;
                     res = JSON.stringify(data.respuestas[i].respuesta)
-                    $("#respuestas").append($("<button id = 'btn-respuesta' class = 'btn-respuesta' onclick='app.revisarResp("+data.respuestas[i].correcta + "," + res +")'>"+data.respuestas[i].respuesta+"</button>"))
+                    $("#respuestas").append($("<button id =" + res + "class = 'btn-respuesta' onclick='app.revisarResp("+data.respuestas[i].correcta + "," + res + ")'>"+data.respuestas[i].respuesta+"</button>"))
                 }
                 
-
+                intervalo = setInterval(cronometro, 1000, data.tiempo - 1)
                 //setTimeout(finTiempo,(data.tiempo)*1000)
+                // var dat = new Date(Date.now())
+                // console.log(dat.getSeconds())
             }
         // });
     }
 
+    function cronometro(tiempo){
+        document.getElementById('crono').innerHTML = tiempo + restar;
+        restar -= 1;
+    }
+
     function finTiempo(){
+        clearInterval(intervalo)
+        restar = 0;
         siguientePregunta()
     }
 
     function revisarResp(booleano, str){
+        var prueba = "#" + str
+        var prueba2 = '.btn-respuesta'
         $('.btn-respuesta').attr('disabled', true);
+        var botones = document.getElementsByClassName('btn-respuesta')
+        console.log(botones)
+        for (let i = 0; i<botones.length; i++){
+            botones[i].style.backgroundColor = '#14263a';
+        }
+        document.getElementById(str).style.backgroundColor = '#2e8b77';
+ 
+
         if(booleano === true){
             console.log("tabn")
         }else{
@@ -78,24 +109,45 @@ var app = (function(){
     function clean(){
         $("#pregunta").empty();
         $("#respuestas").empty();
+        var c = document.getElementById("grafica")
+        var ctx = c.getContext("2d")
+        ctx.clearRect(0, 0, c.width, c.height)
+        ejey = [];
     }
 
     function siguientePregunta(){
-        codPreg += 1;
-        clean();
-        getPregunta();
+        var cod = sessionStorage.getItem('codPreg')
+        console.log(cod)
+        cod ++
+        sessionStorage.setItem('codPreg', cod)
+        console.log(sessionStorage.getItem('codPreg'))
+        window.location="answer.html"
+        //codPreg += 1;
+        //clean();
+        //getPregunta();
+    }
+
+    function next(){
+        window.location="game.html"
+        //getPregunta();
     }
 
     function setRtasSelec(str){
         apiclient.setRtasSelec(str);
     }
 
+    function prueba(){
+        document.getElementById('publico').style.display = 'none';
+        setInterval(ayudaPubl, 1000)
+    }
+
     function ayudaPubl(){
+        //document.getElementById('publico').style.display = 'none';
         apiclient.ayudaPubl(ver)
+
     }
 
     var ver = function(data){
-        //console.log(data)
         for(let i = 0; i<data.length; i++){
             if(ejex.includes(data[i].o1.toString())){
                 var indice = ejex.indexOf(data[i].o1.toString())
@@ -133,12 +185,16 @@ var app = (function(){
         });
     }
 
+    
+
     return{
         getPregunta:getPregunta,
         siguientePregunta:siguientePregunta,
         getNombres: getNombres,
         entrarCues: entrarCues,
         revisarResp:revisarResp,
-        ayudaPubl: ayudaPubl
+        ayudaPubl: ayudaPubl,
+        next: next,
+        prueba: prueba
     }
 })();
