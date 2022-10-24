@@ -71,4 +71,5 @@ public class QuestikServices {
     public ArrayList<Tuple> getUsuarios() throws QuestikNotFoundException{
         return questikPersistence.getUsurios();
     }
+
 }

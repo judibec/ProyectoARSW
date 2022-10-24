@@ -16,4 +16,15 @@ public class STOMPMessages {
         System.out.println("Nuevo punto recibido en el servidor!:"+ cues);
         msgt.convertAndSend("/topic/newquestik."+ cuestionario,cues);
     }
+
+    @MessageMapping("/siguientePregunta/newquestik.{cuestionario}")
+    public synchronized void handlePointEvent(@DestinationVariable String cuestionario) throws Exception {
+        msgt.convertAndSend("/topic/newquestik."+ cuestionario,"nextQuestion");
+    }
+
+    @MessageMapping("/puntajes/newquestik.{cuestionario}")
+    public synchronized void handlePointEvent2(@DestinationVariable String cuestionario) throws Exception {
+        msgt.convertAndSend("/topic/newquestik."+ cuestionario,"puntos");
+    }
+    
 }

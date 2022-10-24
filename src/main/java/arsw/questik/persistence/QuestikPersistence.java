@@ -33,4 +33,5 @@ public interface QuestikPersistence {
 
     public ArrayList<Tuple> getUsurios() throws QuestikNotFoundException;
 
+
 }

@@ -43,6 +43,14 @@ var apiclient = (function(){
             callback(
                 JSON.parse($.ajax({type: 'GET', url: 'questiksTemp/bandera', async: false}).responseText)
             )
+        },
+
+        getPuntajes: function(callback){
+            callback(
+                JSON.parse($.ajax({type: 'GET', url: 'questiksTemp/bandera', async: false}).responseText)
+            )
         }
+
+        
     }
 })();

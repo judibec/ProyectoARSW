@@ -1,6 +1,8 @@
 package arsw.questik.persistence.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -200,9 +202,27 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
             int puntaje = usuario.getPuntaje();
             Tuple tuple = new Tuple<>(nickname, puntaje);
             usuariosIn.add(tuple);
+            
         }
-        return usuariosIn;
+
+        return getUsuBySco(usuariosIn);
     }
+
+    public ArrayList<Tuple> getUsuBySco(ArrayList<Tuple> usuar) throws QuestikNotFoundException{
+        Collections.sort(usuar, new Comparator<Tuple>(){
+
+			@Override
+			public int compare(Tuple o1, Tuple o2) {
+				Integer primer = (Integer) o1.getElem2();
+                Integer segundo = (Integer) o2.getElem2();
+				return primer.compareTo(segundo);
+			}
+            
+        });
+        return usuar;
+    }
+
+
 
     
 }

@@ -52,10 +52,10 @@ body{
     justify-items: center;
 }
 
-#btn-respuesta{
+.btn-respuesta{
     border: 1px solid #2e518b;
     padding: 5px;
-    background-color: #2e518b; 
+    background-color: #2e598b; 
     color: #ffffff;
     text-decoration: none;
     border-radius: 50px;
@@ -63,7 +63,8 @@ body{
     transition: all 1s ease;
 }
 
-#btn-respuesta:hover{
+.btn-respuesta:hover{
     background: #318aac;
     color: #fff !important;
 }
+
