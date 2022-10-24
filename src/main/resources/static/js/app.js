@@ -3,6 +3,9 @@ var app = (function(){
     var respuestas;
     var ejex;
     var ejey = [];
+    var topico = 0;
+    var stompClient = null;
+    var conexion = false;
     function getNombres(){
         apiclient.getCuestionariosNombres(poblarTabla);
     }
@@ -110,14 +113,17 @@ var app = (function(){
         var existe = data
         if(existe === true){
             sessionStorage.setItem("codigoIngresadoV",$("#codigo").val());
-            window.location="admin_wait.html"
+            window.location="user_wait.html"
         }else{
             alert("no existe el cuestionario")
         }
     }
 
     function cargarWait(){
-        $("#codigoJugar").append(sessionStorage.getItem("codigoIngresadoV"))
+        $("#codigoJugar").empty();
+        $("#codigoJugar").append(sessionStorage.getItem("codigoIngresadoV"))        
+        // $("#usuarios").detach()
+        $("#usuarios tbody").empty();
         apiclient.getUsuarios(usuarios)
     }
 
@@ -135,7 +141,7 @@ var app = (function(){
     }
 
     function borrarUsu(nick){
-        alert("xd")
+        stompClient.send("/app"+topico, {},JSON.stringify(nick))
     }
 
     function setRtasSelec(str){
@@ -183,7 +189,30 @@ var app = (function(){
                 },
             }
         });
-    }
+    };
+
+    var addToTopic = function(questik){
+        stompClient.send("/app"+topico, {},JSON.stringify(questik));
+    };
+
+    var connectAndSubscribe = function () {
+        console.info('Connecting to WS...');
+        var socket = new SockJS('/stompendpoint');
+        stompClient = Stomp.over(socket);
+        
+        //subscribe to /topic/TOPICXX when connections succeed
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe("/topic"+topico, function (eventbody) {
+            //    alert(JSON.parse(eventbody.body));
+                // var ques=JSON.parse(eventbody.body);
+                // revisarCues();
+                cargarWait();
+                
+            })
+        });
+
+    };
 
     return{
         getPregunta:getPregunta,
@@ -194,6 +223,26 @@ var app = (function(){
         revisarCues:revisarCues,
         cargarWait:cargarWait,
         ayudaPubl: ayudaPubl,
-        borrarUsu:borrarUsu
+        borrarUsu:borrarUsu,
+        
+        connect: function(){
+            var questik = sessionStorage.getItem("codigoIngresadoV");
+            topico = "/newquestik."+questik;
+            connectAndSubscribe();
+            setTimeout(()=>{addToTopic(questik);},1000)
+            // alert(questik);
+            // while(conexion){
+            //     addToTopic(questik);
+            //     revisarCues();  
+            // }
+        },
+
+        disconnect: function () {
+            if (stompClient !== null) {
+                stompClient.disconnect();
+            }
+            setConnected(false);
+            console.log("Disconnected");
+        }
     }
 })();
