@@ -30,7 +30,7 @@ var app = (function(){
     function entrarCues(codigoCues){
         apiclient.guardarCodigoCues(codigoCues);
         sessionStorage.setItem("codigoIngresadoV",codigoCues);
-        sessionStorage.setItem('codPreg', codPreg)
+        localStorage.setItem('codPreg', codPreg)
         window.location="admin_wait.html"
     }
 
@@ -40,33 +40,60 @@ var app = (function(){
     // }
 
     function empezar(){
-        sessionStorage.setItem("bandera",parseInt(0,10));
-        var questik = sessionStorage.getItem("codigoIngresadoV");
-        topico = "/newquestik."+questik;
-        connectAndSubscribe();
-        setTimeout(()=>{stompClient.send("/app/siguientePregunta"+topico);},1000)
+        // sessionStorage.setItem("bandera",parseInt(0,10));
+        // var questik = sessionStorage.getItem("codigoIngresadoV");
+        // topico = "/newquestik."+questik;
+        // connectAndSubscribe();
+        // setTimeout(()=>{stompClient.send("/app/siguientePregunta"+topico);},1000)
+        sessionStorage.setItem("bandera",0);
+        window.location="game.html"  
     }
 
     function getPregunta(){
-        if(sessionStorage.getItem("bandera") == 0){
+        var x = document.getElementById("juego");
+        var y = document.getElementById("puntajes");
+        x.style.display = "block";
+        y.style.display = "none";
+        // if(sessionStorage.getItem("bandera") == 0){
+        //     var questik = sessionStorage.getItem("codigoIngresadoV");
+        //     topico = "/newquestik."+questik;
+        //     connectAndSubscribe();
+        //     setTimeout(()=>{stompClient.send("/app/siguientePregunta"+topico);},1000)
+        //     var flag = sessionStorage.setItem("bandera",0);
+        //     flag++
+        //     sessionStorage.setItem("bandera",flag)
+        //     // sessionStorage.setItem("codPreg",codPreg);
+        // }
+        // if(sessionStorage.getItem("codPreg")<=1){
             var questik = sessionStorage.getItem("codigoIngresadoV");
             topico = "/newquestik."+questik;
             connectAndSubscribe();
+        if(sessionStorage.getItem("bandera")==0){
+            // var questik = sessionStorage.getItem("codigoIngresadoV");
+            // topico = "/newquestik."+questik;
+            // connectAndSubscribe();
             setTimeout(()=>{stompClient.send("/app/siguientePregunta"+topico);},1000)
-            var flag = sessionStorage.setItem("bandera",0);
-            flag++
-            sessionStorage.setItem("bandera",flag)
-            // sessionStorage.setItem("codPreg",codPreg);
+            //setTimeout(()=>{window.location="game.html"},1000)
+            // sessionStorage.setItem("bandera",1)
+        }else if(sessionStorage.getItem("bandera")==1){
+            setTimeout(()=>{stompClient.send("/app/siguientePregunta"+topico);},1000)
         }
+        // if(sessionStorage.getItem("bandera")==1 || sessionStorage.getItem("bandera")==2){
+        //     var questik = sessionStorage.getItem("codigoIngresadoV");
+        //     topico = "/newquestik."+questik;
+        //     setTimeout(()=>{stompClient.send("/app/siguientePregunta"+topico);},1000)
+        //     sessionStorage.setItem("bandera",2)
+        // }
+        // }
         apiclient.getCodCues(funIntermedia);
     }
 
     var funIntermedia = function(data){
         console.log(data);
         codCues=data
-        console.log(sessionStorage.getItem('codPreg'))
+        console.log(localStorage.getItem('codPreg'))
 
-        apiclient.getPreguntaCodigo(codCues, sessionStorage.getItem('codPreg') ,crearTabla);
+        apiclient.getPreguntaCodigo(codCues, localStorage.getItem('codPreg') ,crearTabla);
     }
 
     var crearTabla = function(data){
@@ -80,12 +107,12 @@ var app = (function(){
                 res = JSON.stringify(data.respuestas[i].respuesta)
                 $("#respuestas").append($("<button id =" + res + "class = 'btn-respuesta' onclick='app.revisarResp("+data.respuestas[i].correcta + "," + res + ")'>"+data.respuestas[i].respuesta+"</button>"))
             }
-            intervalo = setInterval(cronometro, 1000, data.tiempo - 1)
-            setTimeout(finTiempo,(data.tiempo)*1000)
+            // intervalo = setInterval(cronometro, 1000, data.tiempo - 1)
+            // setTimeout(finTiempo,(data.tiempo)*1000)
         }
-        var flag = sessionStorage.setItem("bandera",0);
-        flag++
-        sessionStorage.setItem("bandera",flag)
+        // var flag = sessionStorage.setItem("bandera",0);
+        // flag++
+        // sessionStorage.setItem("bandera",flag)
     }
 
     function cronometro(tiempo){
@@ -129,20 +156,39 @@ var app = (function(){
     }
 
     function siguientePregunta(){
-        var cod = sessionStorage.getItem('codPreg')
-        cod ++
-        sessionStorage.setItem('codPreg', cod)
+        // var x = document.getElementById("juego");
+        // var y = document.getElementById("puntajes");
+        // y.style.display = "block";
+        // x.style.display = "none";
+        // var cod = localStorage.getItem('codPreg')
+        // cod ++
+        // localStorage.setItem('codPreg', cod)
+        // clean();
+        // var questik = sessionStorage.getItem("codigoIngresadoV");
+        // topico = "/newquestik."+questik;
+        // alert(topico)
+        // connectAndSubscribe();
         var questik = sessionStorage.getItem("codigoIngresadoV");
         topico = "/newquestik."+questik;
-        alert(topico)
         connectAndSubscribe();
         setTimeout(()=>{stompClient.send("/app/puntajes"+topico);},1000)
         // window.location="answer.html"
     }
 
+    function accionSiguientePregunta(){
+        var x = document.getElementById("juego");
+        var y = document.getElementById("puntajes");
+        y.style.display = "block";
+        x.style.display = "none";
+        var cod = localStorage.getItem('codPreg')
+        cod ++
+        localStorage.setItem('codPreg', cod)
+        clean();
+    }
+
     function next(){
         // stompClient.send("/app/siguientePregunta"+topico)
-        window.location="game.html"
+        getPregunta()
     }
 
     var nickname;
@@ -263,26 +309,40 @@ var app = (function(){
             console.log('Connected: ' + frame);
             stompClient.subscribe("/topic"+topico, function (eventbody) {
                 if(eventbody.body==="nextQuestion"){
-                    if(sessionStorage.getItem("bandera") == 0){
+                    // if(sessionStorage.getItem("bandera") == 0){
                         // alert("entroA")
-                        window.location="game.html";
-                    }
+                        // window.location="game.html";
+                    // }
                     // var prueba = sessionStorage.getItem("bandera")
                     // prueba++
                     // console.log(prueba)
                     // var prueba2 = sessionStorage.getItem("codPreg")
                     // console.log(prueba2)
-                    else if(sessionStorage.getItem("bandera") == sessionStorage.getItem("codPreg")){
+                    // else if(sessionStorage.getItem("bandera") == sessionStorage.getItem("codPreg")){
                         // alert("entro")
-                        window.location="game.html";
-                    }
+                        if(sessionStorage.getItem("bandera")==0){
+                            alert("soy 0")
+                            sessionStorage.setItem("bandera",1)
+                            window.location="game.html"
+
+                        }
+                        // sessionStorage.setItem("bandera",1)
+                        if(sessionStorage.getItem("bandera")==1){
+                            alert("soy 1")
+                            // console.log("nomessi")
+                            sessionStorage.setItem("bandera",2)
+                            // window.location="game.html"
+                        }
+                    // }
             //    alert(JSON.parse(eventbody.body));
                     // apiclient.getCodCues(funIntermedia);
                     
                     // console.log("hola")
-                }if(eventbody.body==="puntos"){
-                    // getPuntajes()
-                    window.location="answer.html"
+                }
+                if(eventbody.body==="puntos"){
+                    accionSiguientePregunta();
+                    getPuntajes();
+                    // window.location="answer.html"
                 }else{
                     cargarWait();
                 }
@@ -308,7 +368,7 @@ var app = (function(){
             }
         });
         datanew.map((element) =>{
-            $("#puntajes > tbody:last").append($("<tr><td>" + element.nickname + "</td><td>" + 
+            $("#puntajesA > tbody:last").append($("<tr><td>" + element.nickname + "</td><td>" + 
             element.puntaje.toString() + "</td>"));
         })
     }

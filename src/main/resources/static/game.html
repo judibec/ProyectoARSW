@@ -13,27 +13,44 @@
 
     </head>
     <body onload="app.getPregunta()">
+        
+            </div>
+            <div id="titulo">
+                <center><h1>Questik?</h1></center>
+            </div>
+        <div id="juego">
+            <div>
+                <h2 id="crono"></h2>
+            </div>
+            <h2 class="pregunta" id="pregunta"></h2>
+            <div class = "respuestas" id="respuestas">
 
+            </div>
+            <div class = "poderes">
+                <button class = "poder" id = "cincuenta"></button>
+                <button class = "poder" id = "publico" onclick="app.prueba()"></button>
+                <button class = "poder" id = "pordos"></button>
+            </div>
+            <button class="siguiente" onclick="app.siguientePregunta()">siguiente</button>
+            <div id="grafic" style="height: 300px">
+                <canvas id="grafica"></canvas>
+            </div>     
         </div>
-        <div id="titulo">
-            <center><h1>Questik?</h1></center>
+        <div id="puntajes" style="display: none">
+            <h2>Puntajes: </h2>
+            <table id="puntajesA">
+                <thead>
+                    <tr>
+                        <th>Nombre del Jugador</th>
+                        <th>Puntaje</th>
+                    </tr>
+                </thead>
+                <tbody>
+    
+                </tbody>
+            </table>
+            <button onclick="app.next()">siguiente</button>
         </div>
-        <div>
-            <h2 id="crono"></h2>
-        </div>
-        <h2 class="pregunta" id="pregunta"></h2>
-        <div class = "respuestas" id="respuestas">
-
-        </div>
-        <div class = "poderes">
-            <button class = "poder" id = "cincuenta"></button>
-            <button class = "poder" id = "publico" onclick="app.prueba()"></button>
-            <button class = "poder" id = "pordos"></button>
-        </div>
-        <button class="siguiente" onclick="app.siguientePregunta()">siguiente</button>
-        <div id="grafic" style="height: 300px">
-            <canvas id="grafica"></canvas>
-        </div>     
         
     </body>
     <script src="js/app.js"></script>
