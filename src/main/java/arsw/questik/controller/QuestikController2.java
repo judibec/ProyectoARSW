@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentHashMap.KeySetView;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +43,18 @@ public class QuestikController2 {
             return new ResponseEntity<>("Error",HttpStatus.NOT_FOUND);
         }
     }
-    
+
+    @RequestMapping(path = "/{bandera}" ,method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getUsuarios(){
+        try{
+            ArrayList<Tuple> usuarios = questikServices.getUsuarios();
+            Gson gson = new Gson();
+            return new ResponseEntity<>(gson.toJson(usuarios), HttpStatus.ACCEPTED);
+        }catch(QuestikNotFoundException ex){
+            Logger.getLogger(QuestikController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>("Error",HttpStatus.NOT_FOUND);
+        }
+    }
+
+
 }

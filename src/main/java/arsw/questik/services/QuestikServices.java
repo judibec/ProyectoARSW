@@ -52,6 +52,10 @@ public class QuestikServices {
         return questikPersistence.getCodCues();
     }
 
+    public boolean revisarCues(String nickname,int codigo) throws QuestikNotFoundException{
+        return questikPersistence.revisarCues(nickname,codigo);
+    }
+
     public void setRtasSelec(String rta) throws QuestikNotFoundException{
         questikPersistence.setRtasSelec(rta);
     }
@@ -63,4 +67,9 @@ public class QuestikServices {
     public ConcurrentHashMap<String, Integer> getRtasSelec() throws QuestikNotFoundException {
         return questikPersistence.getRtasSelec();
     }
+
+    public ArrayList<Tuple> getUsuarios() throws QuestikNotFoundException{
+        return questikPersistence.getUsurios();
+    }
+
 }

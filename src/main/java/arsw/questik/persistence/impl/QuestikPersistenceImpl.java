@@ -1,6 +1,8 @@
 package arsw.questik.persistence.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import arsw.questik.model.Cuestionario;
 import arsw.questik.model.Pregunta;
 import arsw.questik.model.Respuesta;
+import arsw.questik.model.Usuario;
 import arsw.questik.persistence.QuestikNotFoundException;
 import arsw.questik.persistence.QuestikPersistence;
 
@@ -22,6 +25,7 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
 
     private ConcurrentHashMap<String, Integer> rtasSelec = new ConcurrentHashMap<>();
     private Map<Integer, Cuestionario> questiks = new HashMap<>();
+    private ArrayList<Usuario> usuarios = new ArrayList<>();
     private int cuestSelec;
 
     public QuestikPersistenceImpl(){
@@ -156,6 +160,18 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
     }
 
     @Override
+    public boolean revisarCues(String nickname, int codigo) throws QuestikNotFoundException {
+        boolean existe = false;
+        if (questiks.containsKey(codigo)){
+            Usuario usuario = new Usuario(codigo, nickname, 0);
+            usuarios.add(usuario);
+            existe = true;
+        }
+        // System.out.println(usuarios.size());
+        return existe;
+    }
+
+    @Override
     public void setRtasSelec(String rta) throws QuestikNotFoundException {
         if(rtasSelec.containsKey(rta)){
             int cont = rtasSelec.get(rta);
@@ -175,9 +191,38 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
 
     @Override
     public ConcurrentHashMap<String, Integer> getRtasSelec() throws QuestikNotFoundException{
-
         return rtasSelec;
     }
+
+    @Override
+    public ArrayList<Tuple> getUsurios() throws QuestikNotFoundException {
+        ArrayList<Tuple> usuariosIn = new ArrayList<>();
+        for(Usuario usuario:usuarios){
+            String nickname = usuario.getNickname();
+            int puntaje = usuario.getPuntaje();
+            Tuple tuple = new Tuple<>(nickname, puntaje);
+            usuariosIn.add(tuple);
+            
+        }
+
+        return getUsuBySco(usuariosIn);
+    }
+
+    public ArrayList<Tuple> getUsuBySco(ArrayList<Tuple> usuar) throws QuestikNotFoundException{
+        Collections.sort(usuar, new Comparator<Tuple>(){
+
+			@Override
+			public int compare(Tuple o1, Tuple o2) {
+				Integer primer = (Integer) o1.getElem2();
+                Integer segundo = (Integer) o2.getElem2();
+				return primer.compareTo(segundo);
+			}
+            
+        });
+        return usuar;
+    }
+
+
 
     
 }

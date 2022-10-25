@@ -23,9 +23,15 @@ public interface QuestikPersistence {
 
     public int getCodCues() throws QuestikNotFoundException;
 
+    public boolean revisarCues(String nickname, int codigo) throws QuestikNotFoundException;
+
     public void setRtasSelec(String rta) throws QuestikNotFoundException;
 
     public void cleanRtasSelec() throws QuestikNotFoundException;
 
     public ConcurrentHashMap<String, Integer> getRtasSelec() throws QuestikNotFoundException;
+
+    public ArrayList<Tuple> getUsurios() throws QuestikNotFoundException;
+
+
 }

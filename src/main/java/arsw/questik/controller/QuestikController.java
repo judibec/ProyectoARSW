@@ -110,6 +110,18 @@ public class QuestikController {
         }
     }
 
+    @RequestMapping(path = "/{nickname}/{codigo}/{bandera1}/{bandera2}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> revisarCues(@PathVariable String nickname, @PathVariable int codigo){
+        try{
+            boolean data = questikServices.revisarCues(nickname,codigo);
+            Gson gson = new Gson();
+            return new ResponseEntity<>(gson.toJson(data), HttpStatus.ACCEPTED);
+        }catch(QuestikNotFoundException e){
+            Logger.getLogger(QuestikController.class.getName()).log(Level.SEVERE, null, e);
+            return new ResponseEntity<>("Error",HttpStatus.NOT_FOUND);
+        }
+    }
+
     @RequestMapping(path = "/{bandera}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> setRtasSelec(@RequestBody String rta){
         try{
@@ -120,17 +132,4 @@ public class QuestikController {
             return new ResponseEntity<>("Error",HttpStatus.NOT_FOUND);
         }
     }
-
-    // @RequestMapping(value = "/questiksTemp", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    // public ResponseEntity<?> getRtasSelec(){
-    //     try{
-    //         ConcurrentHashMap<String, Integer> rtas = questikServices.getRtasSelec();
-    //         Gson gson = new Gson();
-    //         System.out.println(rtas.toString());
-    //         return new ResponseEntity<>(gson.toJson(rtas), HttpStatus.ACCEPTED);
-    //     }catch(QuestikNotFoundException e){
-    //         return new ResponseEntity<>("Error",HttpStatus.NOT_FOUND);
-    //     }
-    // }
-
 }
