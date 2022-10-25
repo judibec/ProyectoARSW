@@ -54,27 +54,17 @@ var app = (function(){
         var y = document.getElementById("puntajes");
         x.style.display = "block";
         y.style.display = "none";
-        // if(sessionStorage.getItem("bandera") == 0){
-        //     var questik = sessionStorage.getItem("codigoIngresadoV");
-        //     topico = "/newquestik."+questik;
-        //     connectAndSubscribe();
-        //     setTimeout(()=>{stompClient.send("/app/siguientePregunta"+topico);},1000)
-        //     var flag = sessionStorage.setItem("bandera",0);
-        //     flag++
-        //     sessionStorage.setItem("bandera",flag)
-        //     // sessionStorage.setItem("codPreg",codPreg);
-        // }
-        // if(sessionStorage.getItem("codPreg")<=1){
-            var questik = sessionStorage.getItem("codigoIngresadoV");
-            topico = "/newquestik."+questik;
-            connectAndSubscribe();
+        var questik = sessionStorage.getItem("codigoIngresadoV");
+        topico = "/newquestik."+questik;
+        connectAndSubscribe();
         if(sessionStorage.getItem("bandera")==0){
             // var questik = sessionStorage.getItem("codigoIngresadoV");
             // topico = "/newquestik."+questik;
             // connectAndSubscribe();
             setTimeout(()=>{stompClient.send("/app/siguientePregunta"+topico);},1000)
             //setTimeout(()=>{window.location="game.html"},1000)
-            // sessionStorage.setItem("bandera",1)
+            sessionStorage.setItem("bandera",1)
+            
         }else if(sessionStorage.getItem("bandera")==1){
             setTimeout(()=>{stompClient.send("/app/siguientePregunta"+topico);},1000)
         }
@@ -322,7 +312,6 @@ var app = (function(){
                         // alert("entro")
                         if(sessionStorage.getItem("bandera")==0){
                             alert("soy 0")
-                            sessionStorage.setItem("bandera",1)
                             window.location="game.html"
 
                         }
