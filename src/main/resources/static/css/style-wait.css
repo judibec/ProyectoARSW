@@ -1,0 +1,95 @@
+body{
+  font-family: 'Gloria Hallelujah', cursive;
+  font-size: 30px;
+  background: rgb(228, 244, 253);
+}
+  
+#title{
+  background: rgb(139, 211, 248);
+}
+  
+.center-part{
+  text-align: center;
+}
+
+
+button{
+  border: 1px solid #2e518b;
+  padding: 5px;
+  background-color: #2e518b; 
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 50px;
+  font-family: 'Gloria Hallelujah', cursive;
+  transition: all 1s ease;
+}
+
+button:hover{
+  background: #318aac;
+  color: #fff !important;
+}
+
+.eliminar{
+  border: 1px solid #2e518b;
+  padding: 5px;
+  background-color: #2e518b; 
+  color: black;
+  text-decoration: none;
+  border-radius: 50px;
+  font-family: 'Gloria Hallelujah', cursive;
+  transition: all 1s ease;
+}
+
+.eliminar:hover{
+  background: #318aac;
+  color: #fff !important;
+}
+
+.botonsalir {
+  border: 1px solid #e11212;
+  padding: 5px;
+  background-color: #c74f41; 
+  color: #ffffff;
+  text-decoration: none;
+  font-size:x-large;
+  font-family: 'Helvetica', sans-serif; 
+  border-radius: 10px; 
+  float: right;
+}
+
+/* .foo { 
+  //float: left; 
+  width: 95%; 
+  height: 100%; 
+  margin: 5px; 
+  border: 1px solid rgba(0, 0, 1000, .2); 
+  background: #ffffff;
+  display:flex;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+  position:relative;
+}  */
+
+table, th, td {
+  border: 1px solid black;
+  margin:auto;
+  text-align: center;
+}
+
+tr{
+  background-color: white;
+}
+
+.eliminar {
+  border-radius:15px;
+  font-family: 'Gloria Hallelujah', cursive;
+  cursor:pointer;
+  background: rgba(0,0,0,0);
+  transition: all 1s ease;
+}
+
+.eliminar:hover {
+  background: #318aac;
+  color: #fff !important;
+}

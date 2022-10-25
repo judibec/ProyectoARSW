@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <script src="/webjars/jquery/jquery.min.js"></script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/style-wait.css">
+        <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
+        <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+        <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+
+    </head>
+    <!-- <body onload="app.cargarWait()"> -->
+    <body onload="app.connect()">
+        <div id="title">
+            <h1 class="center-part">Questik?</h1>
+        </div>
+        <a class="botonsalir" href="start.html" target="_self">Salir</a>
+        <center><h3 id="codigoJugar"></h3></center>
+        <div class="foo">
+            <table id="usuarios">
+                <thead>
+                    <tr>
+                        <th>Nombre del Jugador</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+        <center><button class="boton" onclick="app.empezar()">INICIAR</button></center>
+    </body>
+    <script src="js/app.js"></script>
+    <script src="js/apiclient.js"></script>
+</html>

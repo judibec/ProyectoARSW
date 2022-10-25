@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Questik-Game</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/style-game.css">
+        <script src="/webjars/jquery/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+        <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+        <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+
+    </head>
+    <body onload="app.getPregunta()">
+        
+            </div>
+            <div id="titulo">
+                <center><h1>Questik?</h1></center>
+            </div>
+        <div id="juego">
+            <div>
+                <h2 id="crono"></h2>
+            </div>
+            <h2 class="pregunta" id="pregunta"></h2>
+            <div class = "respuestas" id="respuestas">
+
+            </div>
+            <div class = "poderes">
+                <button class = "poder" id = "cincuenta"></button>
+                <button class = "poder" id = "publico" onclick="app.prueba()"></button>
+                <button class = "poder" id = "pordos"></button>
+            </div>
+            <!-- <button class="siguiente" onclick="app.siguientePregunta()">siguiente</button> -->
+            <div id="grafic" style="height: 300px">
+                <canvas id="grafica"></canvas>
+            </div>     
+        </div>
+        <div id="puntajes" style="display: none" >
+            <h2>Puntajes: </h2>
+            <table id="puntajesA">
+                <thead>
+                    <tr>
+                        <th>Nombre del Jugador</th>
+                        <th>Puntaje</th>
+                    </tr>
+                </thead>
+                <tbody>
+    
+                </tbody>
+            </table>
+            <button class="btn-next" onclick="app.next()">siguiente</button>
+        </div>
+        <div id = "fin" style="display: none">
+            <h2>GRACIAS POR PATICIPAR</h2>
+        </div>
+    </body>
+    <script src="js/app.js"></script>
+    <script src="js/apiclient.js"></script>
+</html>

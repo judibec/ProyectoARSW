@@ -1,0 +1,31 @@
+table, th, td {
+  border: 1px solid black;
+  margin:auto;
+}
+
+  body{
+  font-family: 'Gloria Hallelujah', cursive;
+  font-size: 30px;
+  background: rgb(228, 244, 253);
+}
+
+#title{
+  background: rgb(139, 211, 248);
+}
+
+.center-part{
+  text-align: center;
+}
+
+.starts {
+  border-radius:15px;
+  font-family: 'Gloria Hallelujah', cursive;
+  cursor:pointer;
+  background: rgba(0,0,0,0);
+  transition: all 1s ease;
+}
+
+.starts:hover {
+  background: #318aac;
+  color: #fff !important;
+}
