@@ -13,15 +13,36 @@ body{
 }
 
 
-.boton {
+button{
   border: 1px solid #2e518b;
-  padding: 10px;
+  padding: 5px;
   background-color: #2e518b; 
   color: #ffffff;
-  text-decoration: none; 
-  text-transform: uppercase; 
-  font-family: 'Helvetica', sans-serif; 
-  border-radius: 50px; 
+  text-decoration: none;
+  border-radius: 50px;
+  font-family: 'Gloria Hallelujah', cursive;
+  transition: all 1s ease;
+}
+
+button:hover{
+  background: #318aac;
+  color: #fff !important;
+}
+
+.eliminar{
+  border: 1px solid #2e518b;
+  padding: 5px;
+  background-color: #2e518b; 
+  color: black;
+  text-decoration: none;
+  border-radius: 50px;
+  font-family: 'Gloria Hallelujah', cursive;
+  transition: all 1s ease;
+}
+
+.eliminar:hover{
+  background: #318aac;
+  color: #fff !important;
 }
 
 .botonsalir {
