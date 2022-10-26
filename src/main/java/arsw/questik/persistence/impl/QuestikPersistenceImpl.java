@@ -38,7 +38,7 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
         respuestas.add(r2);
         respuestas.add(r3);
         respuestas.add(r4);
-        Pregunta p = new Pregunta(1, "pregunta", respuestas,'M', 10);
+        Pregunta p = new Pregunta(1, "pregunta", respuestas,'M', 3);
         List<Pregunta> ps = new ArrayList<Pregunta>();
         ps.add(p);
         //________________________________________
@@ -47,7 +47,7 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
         List<Respuesta> respuestas3 = new ArrayList<Respuesta>();
         respuestas3.add(r9);
         respuestas3.add(r0);
-        Pregunta p3 = new Pregunta(2, "pregunta2", respuestas3,'F', 10);
+        Pregunta p3 = new Pregunta(2, "pregunta2", respuestas3,'F', 3);
         ps.add(p3);
         //________________________________________
         Respuesta r10 = new Respuesta("BECERRA", false);
@@ -59,7 +59,7 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
         respuestas4.add(r11);
         respuestas4.add(r12);
         respuestas4.add(r13);
-        Pregunta p4 = new Pregunta(3, "Hola", respuestas4,'M', 10);
+        Pregunta p4 = new Pregunta(3, "Hola", respuestas4,'M', 3);
         ps.add(p4);
         //________________________________________
         Respuesta r14 = new Respuesta("QUÉ", false);

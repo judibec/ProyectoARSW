@@ -51,10 +51,6 @@ var app = (function(){
     Accion del admin para iniciar a un cuestionario, se conecta con el socket y redirige a traves del socket
     */
     function empezar(){
-        // localStorage.setItem("global", -1);
-        // localStorage.setItem("bandera",-1);
-        // sessionStorage.setItem("global", -1);
-        // sessionStorage.setItem("bandera",-1);
         var questik = sessionStorage.getItem("codigoIngresadoV");
         topico = "/newquestik."+questik;
         connectAndSubscribe();
@@ -88,6 +84,7 @@ var app = (function(){
         if(sessionStorage.getItem("global")==0){
             connectAndSubscribe();
         }
+        sessionStorage.setItem("preguntaCarrera",1)
         apiclient.getCodCues(funIntermedia);
     }
 
@@ -142,9 +139,6 @@ var app = (function(){
     function finTiempo(){
         clearInterval(intervalo)
         restar = 0;
-        // var preg = sessionStorage.getItem("bandera")
-        // preg --
-        // sessionStorage.setItem("bandera", preg)
         siguientePregunta()
     }
 
@@ -176,15 +170,44 @@ var app = (function(){
         }
         if(tipo != 'C'){
             data = apiclient.revisarResp(str, preguntaActual);
+            if(data){
+                document.getElementById(str).style.backgroundColor = '#2e8b77';
+            }else{
+                document.getElementById(str).style.backgroundColor = '#FF0000';
+            }
         }else{
-            data  =apiclient.revisarCarrera(str, preguntaActual);
-        }
-        if(data){
-            document.getElementById(str).style.backgroundColor = '#2e8b77';
-        }else{
-            document.getElementById(str).style.backgroundColor = '#FF0000';
+            var questik = sessionStorage.getItem("codigoIngresadoV");
+            topico = "/newquestik."+questik;
+            stompClient.send("/app/carrera"+topico)
+            // setTimeout(()=>{stompClient.send("/app/carrera"+topico);},500)
+            data = apiclient.revisarCarrera(str, preguntaActual);
+            if(data){
+                setTimeout(()=>{document.getElementById(str).style.backgroundColor = '#2e8b77';},1000)
+            }else{
+                sessionStorage.setItem("preguntaCarrera",0)
+                setTimeout(()=>{document.getElementById(str).style.backgroundColor = '#FF0000';},1000)
+                setTimeout(()=>{stompClient.send("/app/carrera"+topico);},1500)
+            }
         }
         setRtasSelec(str)
+    }
+
+    function cambiarColor(){
+        $('.btn-respuesta').attr('disabled', true);
+        $('.poderes').attr('disabled', true);
+        var botones = document.getElementsByClassName('btn-respuesta')
+        for (let i = 0; i<botones.length; i++){
+            botones[i].style.backgroundColor = '#AF67F0';
+        }
+    }
+
+    function cambiarColorActivado(){
+        $('.btn-respuesta').attr('disabled', false);
+        $('.poderes').attr('disabled', false);
+        var botones = document.getElementsByClassName('btn-respuesta')
+        for (let i = 0; i<botones.length; i++){
+            botones[i].style.backgroundColor = '#2e518b';
+        }
     }
 
     /*
@@ -387,6 +410,15 @@ var app = (function(){
                     accionSiguientePregunta();
                     sessionStorage.setItem("global",1)
                     getPuntajes();
+                }
+                if(eventbody.body==="pausar"){
+                    if(sessionStorage.getItem("preguntaCarrera") == 1){
+                        sessionStorage.setItem("preguntaCarrera",2)
+                        cambiarColor();
+                    }else if(sessionStorage.getItem("preguntaCarrera") == 2){
+                        sessionStorage.setItem("preguntaCarrera",1)
+                        cambiarColorActivado()
+                    }
                 }
                 else{
                     cargarWait();
