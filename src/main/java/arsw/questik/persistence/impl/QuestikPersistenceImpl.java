@@ -29,51 +29,63 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
     private int cuestSelec;
 
     public QuestikPersistenceImpl(){
-        Respuesta r1 = new Respuesta("prueba1 larga muy larga demasiado larga excesivamente larga nos quedamos sin ideas...larga", true);
-        Respuesta r2 = new Respuesta("prueba2", false);
-        Respuesta r3 = new Respuesta("prueba3", false);
-        Respuesta r4 = new Respuesta("prueba4", false);
+        Respuesta r1 = new Respuesta("Cuatro", false);
+        Respuesta r2 = new Respuesta("Doscientos", false);
+        Respuesta r3 = new Respuesta("Infinitos", true);
+        Respuesta r4 = new Respuesta("Veinte", false);
         List<Respuesta> respuestas = new ArrayList<Respuesta>();
         respuestas.add(r1);
         respuestas.add(r2);
         respuestas.add(r3);
         respuestas.add(r4);
-        Pregunta p = new Pregunta(1, "pregunta", respuestas,'M', 10);
+        Pregunta p = new Pregunta(1, "¿Cuantos decimales tiene el numero pi?", respuestas,'M', 10);
         List<Pregunta> ps = new ArrayList<Pregunta>();
         ps.add(p);
         //________________________________________
-        Respuesta r9 = new Respuesta("prueba9", true);
-        Respuesta r0 = new Respuesta("prueba0", false);
+        Respuesta r9 = new Respuesta("Verdadero", true);
+        Respuesta r0 = new Respuesta("Falso", false);
         List<Respuesta> respuestas3 = new ArrayList<Respuesta>();
         respuestas3.add(r9);
         respuestas3.add(r0);
-        Pregunta p3 = new Pregunta(2, "pregunta2", respuestas3,'F', 10);
+        Pregunta p3 = new Pregunta(2, "¿La acrofobia es el miedo al ajo?", respuestas3,'F', 10);
         ps.add(p3);
         //________________________________________
-        Respuesta r10 = new Respuesta("BECERRA", false);
-        Respuesta r11 = new Respuesta("ROZO", true);
-        Respuesta r12 = new Respuesta("ESTEBAN", false);
-        Respuesta r13 = new Respuesta("A", false);
+        Respuesta r10 = new Respuesta("Plioseno", false);
+        Respuesta r11 = new Respuesta("Paleolítico", true);
+        Respuesta r12 = new Respuesta("Neolítico", false);
+        Respuesta r13 = new Respuesta("Edad de los metales", false);
         List<Respuesta> respuestas4 = new ArrayList<Respuesta>();
         respuestas4.add(r10);
         respuestas4.add(r11);
         respuestas4.add(r12);
         respuestas4.add(r13);
-        Pregunta p4 = new Pregunta(3, "Hola", respuestas4,'M', 10);
+        Pregunta p4 = new Pregunta(3, "¿En que periodo de la prehistoria fue descubierto el fuego?", respuestas4,'C', 8);
         ps.add(p4);
         //________________________________________
-        Respuesta r14 = new Respuesta("QUÉ", false);
-        Respuesta r15 = new Respuesta("COMO", false);
-        Respuesta r16 = new Respuesta("QUE", false);
-        Respuesta r17 = new Respuesta("NO?", true);
+        Respuesta r14 = new Respuesta("400 000 000 metros por segundo", false);
+        Respuesta r15 = new Respuesta("247 532 260 metros por segundo", false);
+        Respuesta r16 = new Respuesta("382 258 471 metros por segundo", false);
+        Respuesta r17 = new Respuesta("299 792 458 metros por segundo", true);
         List<Respuesta> respuestas5 = new ArrayList<Respuesta>();
         respuestas5.add(r14);
         respuestas5.add(r15);
         respuestas5.add(r16);
         respuestas5.add(r17);
-        Pregunta p5 = new Pregunta(4, "AHHHH con razón tuurururururu", respuestas5,'C', 20);
+        Pregunta p5 = new Pregunta(4, "¿Cual es la velocidad de la luz?", respuestas5,'M', 15);
         ps.add(p5);
-        Cuestionario c = new Cuestionario("nombre", 12345, ps);
+        //________________________________________
+        Respuesta r18 = new Respuesta("Zeus y Hades", true);
+        Respuesta r19 = new Respuesta("Ares y Hermes", false);
+        Respuesta r20 = new Respuesta("Zeus y Ares", false);
+        Respuesta r21 = new Respuesta("Cronos y Apolo", false);
+        List<Respuesta> respuestas6 = new ArrayList<Respuesta>();
+        respuestas6.add(r18);
+        respuestas6.add(r19);
+        respuestas6.add(r20);
+        respuestas6.add(r21);
+        Pregunta p6 = new Pregunta(5, "¿Cuáles son los dioses griegos correspondientes a los dioses romanos Júpiter y Plutón?", respuestas6,'C', 15);
+        ps.add(p6);
+        Cuestionario c = new Cuestionario("Cultura Genera", 12345, ps);
         questiks.put(12345, c);
 
         //-------------------------------
@@ -90,7 +102,7 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
         Pregunta p2 = new Pregunta(1, "preg", respuestas2,'M', 5);
         List<Pregunta> ps2 = new ArrayList<Pregunta>();
         ps2.add(p2);
-        Cuestionario c2 = new Cuestionario("nombre2", 67890, ps2);
+        Cuestionario c2 = new Cuestionario("prueba", 67890, ps2);
         questiks.put(67890, c2);
 
     }
@@ -100,11 +112,6 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
         // TODO Auto-generated method stub
         return null;
     }
-
-    // @Override
-    // public List<Cuestionario> getCuestionarios() throws QuestikNotFoundException{
-    //     return questiks.values().stream().collect(Collectors.toList());
-    // }
 
     @Override
     public ArrayList<Tuple> getCuestionarios() throws QuestikNotFoundException{
@@ -135,16 +142,6 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
         }
         return pselec;
     }
-
-    // public void iniciarHilo(int segundos) throws InterruptedException{
-    //     Tiempo hilo = new Tiempo();
-    //     hilo.start();
-    //     long startTime = System.nanoTime();
-	// 	TimeUnit.SECONDS.sleep(segundos);
-	// 	long endTime = System.nanoTime();
-	// 	long timeElapse = endTime-startTime;
-    //     hilo.suspender();
-    // }
 
     @Override
     public ArrayList<Respuesta> getRespuestas(int codigoc, int codigop) throws QuestikNotFoundException {
@@ -178,7 +175,6 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
             usuarios.add(usuario);
             existe = true;
         }
-        // System.out.println(usuarios.size());
         return existe;
     }
 
@@ -251,7 +247,21 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
         return bandera;
     }
 
+    @Override
+    public void deleteAll() {
+        usuarios.clear();
+        
+    }
 
-
+    @Override
+    public void actualizarPuntajes(String nickname) throws QuestikNotFoundException {
+        for(Usuario usuario:usuarios){
+            if(usuario.getNickname().equals(nickname)){
+                int puntaje = usuario.getPuntaje();
+                usuario.setPuntaje(puntaje + 600);
+            }
+        }
+        
+    }
     
 }

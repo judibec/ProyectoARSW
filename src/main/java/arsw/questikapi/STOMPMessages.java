@@ -27,9 +27,9 @@ public class STOMPMessages {
         msgt.convertAndSend("/topic/newquestik."+ cuestionario,"puntos");
     }
 
-    @MessageMapping("/user/newquestik.{cuestionario}")
+    @MessageMapping("/carrera/newquestik.{cuestionario}")
     public synchronized void handlePointEvent3(@DestinationVariable String cuestionario) throws Exception {
-        msgt.convertAndSend("/topic/newquestik."+ cuestionario,"user");
+        msgt.convertAndSend("/topic/newquestik."+ cuestionario,"pausar");
     }
     
 }

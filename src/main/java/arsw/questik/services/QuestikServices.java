@@ -39,10 +39,12 @@ public class QuestikServices {
     }
 
     public Pregunta getPregunta(int codigo, int codigop) throws QuestikNotFoundException, InterruptedException{
+        activo.set(0);
         return questikPersistence.getPregunta(codigo,codigop);
     }
 
     public ArrayList<Respuesta> getRespuestas(int codigoc, int codigop) throws QuestikNotFoundException{
+        // activo.set(0);
         return questikPersistence.getRespuestas(codigoc,codigop);
 
     }
@@ -79,38 +81,29 @@ public class QuestikServices {
         return questikPersistence.revisarResp(preguntaActual, str);
     }
 
-    // private synchronized void esperar(){
-    //     activo.set(1);
-    // }
-
-    // private synchronized void activar(){
-    //     activo.set(false);
-    //     notifyAll();
-    // }
-
     public boolean revisarCarrera(int preguntaActual, String str) throws QuestikNotFoundException{
         boolean resp = false;
         synchronized(activo){
+            // System.out.println(activo.get());
             if(activo.get() == 0){
-                // esperar();
                 activo.set(1);
-                // activo.set(true);
                 resp = questikPersistence.revisarResp(preguntaActual, str);
                 if(!resp){
-                    // activar();
                     activo.set(0);
                 }else{
+                    // System.out.println("tabn");
                     activo.set(2);
                 }
             }
-            // else if(activo.get() == 2){
-            //     try {
-            //         wait();
-            //     } catch (InterruptedException e) {
-            //         e.printStackTrace();
-            //     }
-            // }
-            return resp;
         }
+        return resp;
+    }
+
+    public void actualizarPuntajes(String nickname) throws QuestikNotFoundException {
+        questikPersistence.actualizarPuntajes(nickname);
+    }
+
+    public void deleteAll() {
+        questikPersistence.deleteAll();
     }
 }
