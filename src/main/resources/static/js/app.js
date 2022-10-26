@@ -104,13 +104,14 @@ var app = (function(){
         ejex = [];
         if(data.pregunta != undefined){
             document.getElementById("pregunta").innerHTML = data.pregunta;
-            localStorage.setItem("tipoPregunta",data.tipo);
+            localStorage.setItem("tipoPregunta", data.tipo);
             for(let i=0;i<data.respuestas.length;i++){
                 ejex.push('"' + data.respuestas[i].respuesta + '"')
                 ejey.push(0)
                 respuestas = data.respuestas;
                 res = JSON.stringify(data.respuestas[i].respuesta)
-                $("#respuestas").append($("<button id =" + res + "class = 'btn-respuesta' onclick='app.revisarResp("+data.respuestas[i].correcta + "," + res + ")'>"+data.respuestas[i].respuesta+"</button>"))
+                // $("#respuestas").append($("<button id =" + res + "class = 'btn-respuesta' onclick='app.revisarResp("+data.respuestas[i].correcta + "," + res + ")'>"+data.respuestas[i].respuesta+"</button>"))
+                $("#respuestas").append($("<button id =" + res + "class = 'btn-respuesta' onclick='app.revisarResp("+ JSON.stringify(data.tipo) + "," + res + ")'>"+data.respuestas[i].respuesta+"</button>"))
             }
             intervalo = setInterval(cronometro, 1000, data.tiempo - 1)
             setTimeout(finTiempo,(data.tiempo)*1000)
@@ -161,7 +162,27 @@ var app = (function(){
     //     setRtasSelec(str)
     // }
 
-    function revisaResp(str, )
+    function revisarResp(tipo, str){
+        var data;
+        var preguntaActual = localStorage.getItem("bandera")
+        $('.btn-respuesta').attr('disabled', true);
+        $('.poderes').attr('disabled', true);
+        var botones = document.getElementsByClassName('btn-respuesta')
+        for (let i = 0; i<botones.length; i++){
+            botones[i].style.backgroundColor = '#14263a';
+        }
+        if(tipo != 'C'){
+            data = apiclient.revisarResp(str, preguntaActual);
+        }else{
+            data  =apiclient.revisarCarrera(str, preguntaActual);
+        }
+        if(data){
+            document.getElementById(str).style.backgroundColor = '#2e8b77';
+        }else{
+            document.getElementById(str).style.backgroundColor = '#FF0000';
+        }
+        setRtasSelec(str)
+    }
 
     /*
     Limpia la pantalla del game para poner una nueva pregunta
@@ -236,8 +257,6 @@ var app = (function(){
             user.guardarUsuario(nickname);
             apiclient.revisarCues(nickname,codigoIngresado,validarCues);
         }
-        
-        
     }
 
     /*
