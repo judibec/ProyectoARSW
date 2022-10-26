@@ -59,7 +59,7 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
         respuestas4.add(r11);
         respuestas4.add(r12);
         respuestas4.add(r13);
-        Pregunta p4 = new Pregunta(3, "Hola", respuestas4,'M', 3);
+        Pregunta p4 = new Pregunta(3, "Hola", respuestas4,'C', 20);
         ps.add(p4);
         //________________________________________
         Respuesta r14 = new Respuesta("QUÉ", false);
@@ -257,7 +257,15 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
         
     }
 
-
-
+    @Override
+    public void actualizarPuntajes(String nickname) throws QuestikNotFoundException {
+        for(Usuario usuario:usuarios){
+            if(usuario.getNickname().equals(nickname)){
+                int puntaje = usuario.getPuntaje();
+                usuario.setPuntaje(puntaje + 600);
+            }
+        }
+        
+    }
     
 }

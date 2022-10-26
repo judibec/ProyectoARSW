@@ -11,7 +11,6 @@ var app = (function(){
     var codCues = 0;
     var pregunta = 1;
     var numResp = 0;
-    let Url = 0;
 
     /*
     Realiza un get de los cuestionarios con su codigo
@@ -51,8 +50,6 @@ var app = (function(){
     Accion del admin para iniciar a un cuestionario, se conecta con el socket y redirige a traves del socket
     */
     function empezar(){
-        localStorage.setItem("global", 0);
-        localStorage.setItem("bandera",0);
         var questik = sessionStorage.getItem("codigoIngresadoV");
         topico = "/newquestik."+questik;
         connectAndSubscribe();
@@ -63,9 +60,9 @@ var app = (function(){
     /*
     Se activa al cargar el game.html, se conecta al socket y hace un get de las preguntas del cuestionario
     */
-    function getPregunta(){ 
-        if(localStorage.getItem("bandera") < 1){
-            localStorage.setItem("bandera",1);
+    function getPregunta(){
+        if(sessionStorage.getItem("bandera") < 1){
+            sessionStorage.setItem("bandera",1);
         }
         var x = document.getElementById("juego");
         var y = document.getElementById("puntajes");
@@ -83,9 +80,10 @@ var app = (function(){
         }
         var questik = sessionStorage.getItem("codigoIngresadoV");
         topico = "/newquestik."+questik;
-        if(localStorage.getItem("global")==0){
+        if(sessionStorage.getItem("global")==0){
             connectAndSubscribe();
         }
+        sessionStorage.setItem("preguntaCarrera",1)
         apiclient.getCodCues(funIntermedia);
     }
 
@@ -94,7 +92,7 @@ var app = (function(){
     */
     var funIntermedia = function(data){
         codCues=data
-        apiclient.getPreguntaCodigo(codCues, localStorage.getItem("bandera") ,crearTabla);
+        apiclient.getPreguntaCodigo(codCues, sessionStorage.getItem("bandera") ,crearTabla);
     }
 
     /*
@@ -104,7 +102,8 @@ var app = (function(){
         ejex = [];
         if(data.pregunta != undefined){
             document.getElementById("pregunta").innerHTML = data.pregunta;
-            localStorage.setItem("tipoPregunta", data.tipo);
+            // localStorage.setItem("tipoPregunta", data.tipo);
+            sessionStorage.setItem("tipoPregunta", data.tipo);
             for(let i=0;i<data.respuestas.length;i++){
                 ejex.push('"' + data.respuestas[i].respuesta + '"')
                 ejey.push(0)
@@ -140,9 +139,6 @@ var app = (function(){
     function finTiempo(){
         clearInterval(intervalo)
         restar = 0;
-        var preg = localStorage.getItem("bandera")
-        preg --
-        localStorage.setItem("bandera", preg)
         siguientePregunta()
     }
 
@@ -165,7 +161,7 @@ var app = (function(){
 
     function revisarResp(tipo, str){
         var data;
-        var preguntaActual = localStorage.getItem("bandera")
+        var preguntaActual = sessionStorage.getItem("bandera")
         $('.btn-respuesta').attr('disabled', true);
         $('.poderes').attr('disabled', true);
         var botones = document.getElementsByClassName('btn-respuesta')
@@ -174,15 +170,47 @@ var app = (function(){
         }
         if(tipo != 'C'){
             data = apiclient.revisarResp(str, preguntaActual);
+            if(data){
+                document.getElementById(str).style.backgroundColor = '#2e8b77';
+                // console.log(sessionStorage.getItem("nickname"))
+                apiclient.actualizarPuntajes(sessionStorage.getItem("nickname"))
+            }else{
+                document.getElementById(str).style.backgroundColor = '#FF0000';
+            }
         }else{
-            data  =apiclient.revisarCarrera(str, preguntaActual);
-        }
-        if(data){
-            document.getElementById(str).style.backgroundColor = '#2e8b77';
-        }else{
-            document.getElementById(str).style.backgroundColor = '#FF0000';
+            var questik = sessionStorage.getItem("codigoIngresadoV");
+            topico = "/newquestik."+questik;
+            stompClient.send("/app/carrera"+topico)
+            // setTimeout(()=>{stompClient.send("/app/carrera"+topico);},500)
+            data = apiclient.revisarCarrera(str, preguntaActual);
+            if(data){
+                setTimeout(()=>{document.getElementById(str).style.backgroundColor = '#2e8b77';},1000)
+                apiclient.actualizarPuntajes(sessionStorage.getItem("nickname"))
+            }else{
+                sessionStorage.setItem("preguntaCarrera",0)
+                setTimeout(()=>{document.getElementById(str).style.backgroundColor = '#FF0000';},1000)
+                setTimeout(()=>{stompClient.send("/app/carrera"+topico);},1500)
+            }
         }
         setRtasSelec(str)
+    }
+
+    function cambiarColor(){
+        $('.btn-respuesta').attr('disabled', true);
+        $('.poderes').attr('disabled', true);
+        var botones = document.getElementsByClassName('btn-respuesta')
+        for (let i = 0; i<botones.length; i++){
+            botones[i].style.backgroundColor = '#AF67F0';
+        }
+    }
+
+    function cambiarColorActivado(){
+        $('.btn-respuesta').attr('disabled', false);
+        $('.poderes').attr('disabled', false);
+        var botones = document.getElementsByClassName('btn-respuesta')
+        for (let i = 0; i<botones.length; i++){
+            botones[i].style.backgroundColor = '#2e518b';
+        }
     }
 
     /*
@@ -201,9 +229,9 @@ var app = (function(){
     Cuando se acaba el tiempo se conecta al socket y me muestra los puntajes
     */
     function siguientePregunta(){
-        var preg = localStorage.getItem("bandera")
+        var preg = sessionStorage.getItem("bandera")
         preg ++
-        localStorage.setItem("bandera", preg)
+        sessionStorage.setItem("bandera", preg)
         var questik = sessionStorage.getItem("codigoIngresadoV");
         topico = "/newquestik."+questik;
         setTimeout(()=>{stompClient.send("/app/puntajes"+topico);},500)
@@ -212,14 +240,18 @@ var app = (function(){
     /*
     llama a accionSiguientePregunta(?)
     */
-    function adminNextQ(){
-        accionSiguientePregunta();
-    }
+    // function adminNextQ(){
+    //     accionSiguientePregunta();
+    // }
 
     /*
     Visualmente parece que cambiara de preguntas a puntajes 
     */
     function accionSiguientePregunta(){
+        if(sessionStorage.getItem("Url")=="start.html"){
+            var btnnext = document.getElementById("btn-next");
+            btnnext.style.display = "block";
+        }
         var x = document.getElementById("juego");
         var y = document.getElementById("puntajes");
         y.style.display = "block";
@@ -231,9 +263,6 @@ var app = (function(){
     Cuando se activa el boton de los puntajes suma 1 al cod de la pregunta se conecta al socket y llama a getPregunta
     */
     function next(){
-        var preg = localStorage.getItem("bandera")
-        preg ++
-        localStorage.setItem("bandera", preg)
         var questik = sessionStorage.getItem("codigoIngresadoV");
         topico = "/newquestik."+questik;
         setTimeout(()=>{stompClient.send("/app/siguientePregunta"+topico);},500)
@@ -366,6 +395,8 @@ var app = (function(){
         stompClient.send("/app"+topico, {},JSON.stringify(questik));
     };
 
+
+
     var connectAndSubscribe = function () {
         console.info('Connecting to WS...');
         var socket = new SockJS('/stompendpoint');
@@ -374,16 +405,26 @@ var app = (function(){
             console.log('Connected: ' + frame);
             stompClient.subscribe("/topic"+topico, function (eventbody) {
                 if(eventbody.body==="nextQuestion"){
-                    if(localStorage.getItem("global")==0){                      
+                    if(sessionStorage.getItem("global")==0){ 
+                        sessionStorage.setItem("Url",document.referrer.split('/')[3])                   
                         window.location="game.html"
-                    }else if(localStorage.getItem("global")==1){
+                    }else if(sessionStorage.getItem("global")==1){
                         getPregunta()
                     }
                 }
                 if(eventbody.body==="puntos"){
-                    adminNextQ();
-                    localStorage.setItem("global",1)
+                    accionSiguientePregunta();
+                    sessionStorage.setItem("global",1)
                     getPuntajes();
+                }
+                if(eventbody.body==="pausar"){
+                    if(sessionStorage.getItem("preguntaCarrera") == 1){
+                        sessionStorage.setItem("preguntaCarrera",2)
+                        cambiarColor();
+                    }else if(sessionStorage.getItem("preguntaCarrera") == 2){
+                        sessionStorage.setItem("preguntaCarrera",1)
+                        cambiarColorActivado()
+                    }
                 }
                 else{
                     cargarWait();
@@ -437,6 +478,8 @@ var app = (function(){
             var questik = sessionStorage.getItem("codigoIngresadoV");
             topico = "/newquestik."+questik;
             connectAndSubscribe();
+            sessionStorage.setItem("bandera",0);
+            sessionStorage.setItem("global",0);
             setTimeout(()=>{addToTopic(questik);},1000)
         },
 

@@ -61,13 +61,17 @@ var apiclient = (function(){
             return JSON.parse($.ajax({type: 'GET', url: 'questiksTemp/' + link, async: false}).responseText)
         },
 
+        actualizarPuntajes: function(nickname){
+            // var datos = JSON.stringify(nickname)
+            $.ajax({type: 'PUT', url: 'questiksTemp/', data: nickname, contentType: "application/json"})
+        },
+
         deleteAll: function(){
             $.ajax({
                 url: 'questiksTemp/',
                 type: 'DELETE'
             })
         }
-
         
     }
 })();
