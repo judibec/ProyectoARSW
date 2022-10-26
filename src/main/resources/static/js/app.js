@@ -51,8 +51,10 @@ var app = (function(){
     Accion del admin para iniciar a un cuestionario, se conecta con el socket y redirige a traves del socket
     */
     function empezar(){
-        localStorage.setItem("global", 0);
-        localStorage.setItem("bandera",0);
+        // localStorage.setItem("global", -1);
+        // localStorage.setItem("bandera",-1);
+        // sessionStorage.setItem("global", -1);
+        // sessionStorage.setItem("bandera",-1);
         var questik = sessionStorage.getItem("codigoIngresadoV");
         topico = "/newquestik."+questik;
         connectAndSubscribe();
@@ -64,8 +66,8 @@ var app = (function(){
     Se activa al cargar el game.html, se conecta al socket y hace un get de las preguntas del cuestionario
     */
     function getPregunta(){ 
-        if(localStorage.getItem("bandera") < 1){
-            localStorage.setItem("bandera",1);
+        if(sessionStorage.getItem("bandera") < 1){
+            sessionStorage.setItem("bandera",1);
         }
         var x = document.getElementById("juego");
         var y = document.getElementById("puntajes");
@@ -83,7 +85,7 @@ var app = (function(){
         }
         var questik = sessionStorage.getItem("codigoIngresadoV");
         topico = "/newquestik."+questik;
-        if(localStorage.getItem("global")==0){
+        if(sessionStorage.getItem("global")==0){
             connectAndSubscribe();
         }
         apiclient.getCodCues(funIntermedia);
@@ -94,7 +96,7 @@ var app = (function(){
     */
     var funIntermedia = function(data){
         codCues=data
-        apiclient.getPreguntaCodigo(codCues, localStorage.getItem("bandera") ,crearTabla);
+        apiclient.getPreguntaCodigo(codCues, sessionStorage.getItem("bandera") ,crearTabla);
     }
 
     /*
@@ -104,7 +106,8 @@ var app = (function(){
         ejex = [];
         if(data.pregunta != undefined){
             document.getElementById("pregunta").innerHTML = data.pregunta;
-            localStorage.setItem("tipoPregunta", data.tipo);
+            // localStorage.setItem("tipoPregunta", data.tipo);
+            sessionStorage.setItem("tipoPregunta", data.tipo);
             for(let i=0;i<data.respuestas.length;i++){
                 ejex.push('"' + data.respuestas[i].respuesta + '"')
                 ejey.push(0)
@@ -139,9 +142,9 @@ var app = (function(){
     function finTiempo(){
         clearInterval(intervalo)
         restar = 0;
-        var preg = localStorage.getItem("bandera")
-        preg --
-        localStorage.setItem("bandera", preg)
+        // var preg = sessionStorage.getItem("bandera")
+        // preg --
+        // sessionStorage.setItem("bandera", preg)
         siguientePregunta()
     }
 
@@ -164,7 +167,7 @@ var app = (function(){
 
     function revisarResp(tipo, str){
         var data;
-        var preguntaActual = localStorage.getItem("bandera")
+        var preguntaActual = sessionStorage.getItem("bandera")
         $('.btn-respuesta').attr('disabled', true);
         $('.poderes').attr('disabled', true);
         var botones = document.getElementsByClassName('btn-respuesta')
@@ -200,9 +203,9 @@ var app = (function(){
     Cuando se acaba el tiempo se conecta al socket y me muestra los puntajes
     */
     function siguientePregunta(){
-        var preg = localStorage.getItem("bandera")
+        var preg = sessionStorage.getItem("bandera")
         preg ++
-        localStorage.setItem("bandera", preg)
+        sessionStorage.setItem("bandera", preg)
         var questik = sessionStorage.getItem("codigoIngresadoV");
         topico = "/newquestik."+questik;
         setTimeout(()=>{stompClient.send("/app/puntajes"+topico);},500)
@@ -211,9 +214,9 @@ var app = (function(){
     /*
     llama a accionSiguientePregunta(?)
     */
-    function adminNextQ(){
-        accionSiguientePregunta();
-    }
+    // function adminNextQ(){
+    //     accionSiguientePregunta();
+    // }
 
     /*
     Visualmente parece que cambiara de preguntas a puntajes 
@@ -230,9 +233,9 @@ var app = (function(){
     Cuando se activa el boton de los puntajes suma 1 al cod de la pregunta se conecta al socket y llama a getPregunta
     */
     function next(){
-        var preg = localStorage.getItem("bandera")
-        preg ++
-        localStorage.setItem("bandera", preg)
+        // var preg = sessionStorage.getItem("bandera")
+        // preg ++
+        // sessionStorage.setItem("bandera", preg)
         var questik = sessionStorage.getItem("codigoIngresadoV");
         topico = "/newquestik."+questik;
         setTimeout(()=>{stompClient.send("/app/siguientePregunta"+topico);},500)
@@ -287,8 +290,6 @@ var app = (function(){
     Pinta una tabla con los usuarios ingresados
     */
     var usuarios = function(data){
-        localStorage.setItem("uwu", data.length)
-        
             const datanew = data.map((elemento) =>{
                 return{
                     nickname: elemento.o1,
@@ -366,6 +367,8 @@ var app = (function(){
         stompClient.send("/app"+topico, {},JSON.stringify(questik));
     };
 
+
+
     var connectAndSubscribe = function () {
         console.info('Connecting to WS...');
         var socket = new SockJS('/stompendpoint');
@@ -374,15 +377,15 @@ var app = (function(){
             console.log('Connected: ' + frame);
             stompClient.subscribe("/topic"+topico, function (eventbody) {
                 if(eventbody.body==="nextQuestion"){
-                    if(localStorage.getItem("global")==0){                      
+                    if(sessionStorage.getItem("global")==0){                    
                         window.location="game.html"
-                    }else if(localStorage.getItem("global")==1){
+                    }else if(sessionStorage.getItem("global")==1){
                         getPregunta()
                     }
                 }
                 if(eventbody.body==="puntos"){
-                    adminNextQ();
-                    localStorage.setItem("global",1)
+                    accionSiguientePregunta();
+                    sessionStorage.setItem("global",1)
                     getPuntajes();
                 }
                 else{
@@ -437,6 +440,8 @@ var app = (function(){
             var questik = sessionStorage.getItem("codigoIngresadoV");
             topico = "/newquestik."+questik;
             connectAndSubscribe();
+            sessionStorage.setItem("bandera",0);
+            sessionStorage.setItem("global",0);
             setTimeout(()=>{addToTopic(questik);},1000)
         },
 
