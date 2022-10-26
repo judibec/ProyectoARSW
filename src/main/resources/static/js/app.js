@@ -104,6 +104,9 @@ var app = (function(){
             document.getElementById("pregunta").innerHTML = data.pregunta;
             // localStorage.setItem("tipoPregunta", data.tipo);
             sessionStorage.setItem("tipoPregunta", data.tipo);
+            if(sessionStorage.getItem("tipoPregunta")=='C'){
+                $("#pregunta").append(" <span style='color:red'>CARRERA</span>")
+            }
             for(let i=0;i<data.respuestas.length;i++){
                 ejex.push('"' + data.respuestas[i].respuesta + '"')
                 ejey.push(0)

@@ -81,41 +81,20 @@ public class QuestikServices {
         return questikPersistence.revisarResp(preguntaActual, str);
     }
 
-    // private synchronized void esperar(){
-    //     activo.set(1);
-    // }
-
-    // private synchronized void activar(){
-    //     activo.set(false);
-    //     notifyAll();
-    // }
-
     public boolean revisarCarrera(int preguntaActual, String str) throws QuestikNotFoundException{
         boolean resp = false;
-        // System.out.println(activo.get());
         synchronized(activo){
             System.out.println(activo.get());
             if(activo.get() == 0){
-                // esperar();
                 activo.set(1);
-                // activo.set(true);
                 resp = questikPersistence.revisarResp(preguntaActual, str);
                 if(!resp){
-                    // activar();
                     activo.set(0);
                 }else{
-                    System.out.println("tabn");
+                    // System.out.println("tabn");
                     activo.set(2);
                 }
             }
-            // else if(activo.get() == 2){
-            //     try {
-            //         wait();
-            //     } catch (InterruptedException e) {
-            //         e.printStackTrace();
-            //     }
-            // }
-            
         }
         return resp;
     }
