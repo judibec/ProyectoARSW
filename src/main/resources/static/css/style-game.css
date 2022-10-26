@@ -87,9 +87,19 @@ tr{
     border-radius: 50px;
     font-family: 'Gloria Hallelujah', cursive;
     transition: all 1s ease;
+    text-align: center;
 }
 
 .btn-next:hover{
     background: #318aac;
     color: #fff !important;
+}
+
+/* #divboton{
+    justify-content: center;
+    align-content: center;
+} */
+
+#mensajeFin{
+    text-align: center;
 }

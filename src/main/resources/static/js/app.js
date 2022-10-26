@@ -11,13 +11,18 @@ var app = (function(){
     var codCues = 0;
     var pregunta = 1;
     var numResp = 0;
-    let Url = 0;
 
-    function getNombres(){
-        apiclient.getCuestionariosNombres(poblarTabla);
+    /*
+    Realiza un get de los cuestionarios con su codigo
+    */
+    function getNombresCuestionarios(){
+        apiclient.getCuestionariosNombres(poblarTablaCuestionarios);
     }
 
-    var poblarTabla = function(data){
+    /*
+    Pinta una tabla con el nombre de cada cuestionario
+    */
+    var poblarTablaCuestionarios = function(data){
         const datanew = data.map((elemento) =>{
             return{
                 codigo: elemento.o1,
@@ -30,6 +35,10 @@ var app = (function(){
         });
     }
     
+    /*
+    Redireccion a la sala de espera del admin 
+    Almacena el codigo del cuestionario
+    */
     function entrarCues(codigoCues){
         apiclient.guardarCodigoCues(codigoCues);
         sessionStorage.setItem("codigoIngresadoV",codigoCues);
@@ -37,61 +46,73 @@ var app = (function(){
         window.location="admin_wait.html"
     }
 
-
+    /*
+    Accion del admin para iniciar a un cuestionario, se conecta con el socket y redirige a traves del socket
+    */
     function empezar(){
-        localStorage.setItem("global", 0);
-        localStorage.setItem("bandera",0);
         var questik = sessionStorage.getItem("codigoIngresadoV");
         topico = "/newquestik."+questik;
         connectAndSubscribe();
         setTimeout(()=>{stompClient.send("/app/siguientePregunta"+topico);},1000)
     }
 
-
-
-    function getPregunta(){ 
-        // if(Url == "http://localhost:8080/admin_wait.html"){
-        //     console.log("nose")
-        // }
-        // else if(Url != "http://localhost:8080/admin_wait.html"){
-        //     Url = document.referrer;
-        //     sessionStorage.setItem("PreURL",Url)
-        // }
-        localStorage.setItem("Respondidas",numResp)
-        if(localStorage.getItem("bandera") < 1){
-            localStorage.setItem("bandera",1);
+    
+    /*
+    Se activa al cargar el game.html, se conecta al socket y hace un get de las preguntas del cuestionario
+    */
+    function getPregunta(){
+        if(sessionStorage.getItem("bandera") < 1){
+            sessionStorage.setItem("bandera",1);
         }
         var x = document.getElementById("juego");
         var y = document.getElementById("puntajes");
         x.style.display = "block";
         y.style.display = "none";
+        var boleano = sessionStorage.getItem("ayudaP")
+        if(boleano == 'true'){
+            document.getElementById('publico').style.display = 'none';
+            var c = document.getElementById("grafica")
+            var ctx = c.getContext("2d")
+            ctx.clearRect(0, 0, c.width, c.height)
+            if(window.document.querySelector("#grafica")){
+                document.getElementById('grafic').style.display = 'none';
+            }
+        }
         var questik = sessionStorage.getItem("codigoIngresadoV");
         topico = "/newquestik."+questik;
-        connectAndSubscribe();
+        if(sessionStorage.getItem("global")==0){
+            connectAndSubscribe();
+        }
+        sessionStorage.setItem("preguntaCarrera",1)
         apiclient.getCodCues(funIntermedia);
     }
 
+    /*
+    toma el codigo de la pregunta y realiza un get de esa pregunta
+    */
     var funIntermedia = function(data){
-        console.log(data);
         codCues=data
-        console.log(sessionStorage.getItem('codPreg'))
-
-        apiclient.getPreguntaCodigo(codCues, localStorage.getItem("bandera") ,crearTabla);
+        apiclient.getPreguntaCodigo(codCues, sessionStorage.getItem("bandera") ,crearTabla);
     }
 
+    /*
+    Recibe pregunta con respuestas y las pinta, si no recibe pregunta me manda a la pagina final
+    */
     var crearTabla = function(data){
-        //console.log(localStorage.getItem("uwu"))
         ejex = [];
         if(data.pregunta != undefined){
             document.getElementById("pregunta").innerHTML = data.pregunta;
+            sessionStorage.setItem("tipoPregunta", data.tipo);
+            if(sessionStorage.getItem("tipoPregunta")=='C'){
+                $("#pregunta").append(" <span style='color:red'>CARRERA</span>")
+            }
             for(let i=0;i<data.respuestas.length;i++){
                 ejex.push('"' + data.respuestas[i].respuesta + '"')
                 ejey.push(0)
                 respuestas = data.respuestas;
                 res = JSON.stringify(data.respuestas[i].respuesta)
-                // if(sessionStorage.getItem("PreURL") != "http://localhost:8080/admin_wait.html"){
-                    $("#respuestas").append($("<button id =" + res + "class = 'btn-respuesta' onclick='app.revisarResp("+data.respuestas[i].correcta + "," + res + ")'>"+data.respuestas[i].respuesta+"</button>"))
-                // }
+                // $("#respuestas").append($("<button id =" + res + "class = 'btn-respuesta' onclick='app.revisarResp("+data.respuestas[i].correcta + "," + res + ")'>"+data.respuestas[i].respuesta+"</button>"))
+                $("#respuestas").append($("<button id =" + res + "class = 'btn-respuesta' onclick='app.revisarResp("+ JSON.stringify(data.tipo) + "," + res + ")'>"+data.respuestas[i].respuesta+"</button>"))
             }
             intervalo = setInterval(cronometro, 1000, data.tiempo - 1)
             setTimeout(finTiempo,(data.tiempo)*1000)
@@ -102,48 +123,87 @@ var app = (function(){
             x.style.display = "none";
             y.style.display = "none";
             z.style.display = "block";
+            apiclient.deleteAll();
         }
     }
 
+    /*
+    Pinta los numeros del tiempo restante
+    */
     function cronometro(tiempo){
         document.getElementById('crono').innerHTML = tiempo + restar;
         restar -= 1;
     }
 
+    /*
+    cuando se acaba el tiempo me redirecciona a los puntajes
+    */
     function finTiempo(){
         clearInterval(intervalo)
         restar = 0;
-        var preg = localStorage.getItem("bandera")
-        preg --
-        localStorage.setItem("bandera", preg)
         siguientePregunta()
     }
 
-    function revisarResp(booleano, str){
-        // var numRes = localStorage.getItem("Respondidas");
-        // numRes++
-        // localStorage.setItem("Respondidas",numRes)
+    /*
+    Accion del boton de las respuestas, revisa si esta bien y se pinta de verde o rojo respectivo
+    */
+    function revisarResp(tipo, str){
+        var data;
+        var preguntaActual = sessionStorage.getItem("bandera")
         $('.btn-respuesta').attr('disabled', true);
+        $('.poderes').attr('disabled', true);
         var botones = document.getElementsByClassName('btn-respuesta')
         for (let i = 0; i<botones.length; i++){
             botones[i].style.backgroundColor = '#14263a';
         }
-        // document.getElementById(str).style.backgroundColor = '#2e8b77';
-        // console.log(localStorage.getItem("Respondidas"))
-        // var questik = sessionStorage.getItem("codigoIngresadoV");
-        // topico = "/newquestik."+questik;
-        // connectAndSubscribe();
-        // if(localStorage.getItem("Respondidas") === localStorage.getItem("uwu")){
-            // setTimeout(()=>{stompClient.send("/app/siguientePregunta"+topico);},1000)
-            if(booleano === true){
+        if(tipo != 'C'){
+            data = apiclient.revisarResp(str, preguntaActual);
+            if(data){
                 document.getElementById(str).style.backgroundColor = '#2e8b77';
+                // console.log(sessionStorage.getItem("nickname"))
+                apiclient.actualizarPuntajes(sessionStorage.getItem("nickname"))
             }else{
                 document.getElementById(str).style.backgroundColor = '#FF0000';
             }
-        // }
+        }else{
+            var questik = sessionStorage.getItem("codigoIngresadoV");
+            topico = "/newquestik."+questik;
+            stompClient.send("/app/carrera"+topico)
+            // setTimeout(()=>{stompClient.send("/app/carrera"+topico);},500)
+            data = apiclient.revisarCarrera(str, preguntaActual);
+            if(data){
+                setTimeout(()=>{document.getElementById(str).style.backgroundColor = '#2e8b77';},1000)
+                apiclient.actualizarPuntajes(sessionStorage.getItem("nickname"))
+            }else{
+                sessionStorage.setItem("preguntaCarrera",0)
+                setTimeout(()=>{document.getElementById(str).style.backgroundColor = '#FF0000';},1000)
+                setTimeout(()=>{stompClient.send("/app/carrera"+topico);},1500)
+            }
+        }
         setRtasSelec(str)
     }
 
+    function cambiarColor(){
+        $('.btn-respuesta').attr('disabled', true);
+        $('.poderes').attr('disabled', true);
+        var botones = document.getElementsByClassName('btn-respuesta')
+        for (let i = 0; i<botones.length; i++){
+            botones[i].style.backgroundColor = '#AF67F0';
+        }
+    }
+
+    function cambiarColorActivado(){
+        $('.btn-respuesta').attr('disabled', false);
+        $('.poderes').attr('disabled', false);
+        var botones = document.getElementsByClassName('btn-respuesta')
+        for (let i = 0; i<botones.length; i++){
+            botones[i].style.backgroundColor = '#2e518b';
+        }
+    }
+
+    /*
+    Limpia la pantalla del game para poner una nueva pregunta
+    */
     function clean(){
         $("#pregunta").empty();
         $("#respuestas").empty();
@@ -153,21 +213,26 @@ var app = (function(){
         ejey = [];
     }
 
+    /*
+    Cuando se acaba el tiempo se conecta al socket y me muestra los puntajes
+    */
     function siguientePregunta(){
-        var preg = localStorage.getItem("bandera")
+        var preg = sessionStorage.getItem("bandera")
         preg ++
-        localStorage.setItem("bandera", preg)
+        sessionStorage.setItem("bandera", preg)
         var questik = sessionStorage.getItem("codigoIngresadoV");
         topico = "/newquestik."+questik;
-        connectAndSubscribe();
         setTimeout(()=>{stompClient.send("/app/puntajes"+topico);},500)
     }
 
-    function adminNextQ(){
-        accionSiguientePregunta();
-    }
-
+    /*
+    Visualmente parece que cambiara de preguntas a puntajes 
+    */
     function accionSiguientePregunta(){
+        if(sessionStorage.getItem("Url")=="start.html"){
+            var btnnext = document.getElementById("btn-next");
+            btnnext.style.display = "block";
+        }
         var x = document.getElementById("juego");
         var y = document.getElementById("puntajes");
         y.style.display = "block";
@@ -175,18 +240,21 @@ var app = (function(){
         clean();
     }
 
+    /*
+    Cuando se activa el boton de los puntajes suma 1 al cod de la pregunta se conecta al socket y llama a getPregunta
+    */
     function next(){
-        var preg = localStorage.getItem("bandera")
-        preg ++
-        localStorage.setItem("bandera", preg)
         var questik = sessionStorage.getItem("codigoIngresadoV");
         topico = "/newquestik."+questik;
         setTimeout(()=>{stompClient.send("/app/siguientePregunta"+topico);},500)
-        getPregunta()
     }
 
     var nickname;
     var codigoIngresado;
+
+    /*
+    Valida que nickname y usuarios no esten vacios, si esta correcto guarda el nickname en back
+    */
     function revisarCues(){
         nickname = $("#nickname").val();
         codigoIngresado = $("#codigo").val();
@@ -197,12 +265,14 @@ var app = (function(){
             event.target.setCustomValidity('Debe ingresar codigo');
         }
         if(nickname && codigoIngresado){
+            user.guardarUsuario(nickname);
             apiclient.revisarCues(nickname,codigoIngresado,validarCues);
         }
-        
-        
     }
 
+    /*
+    Revisa si el cuestionario ingresado existe
+    */
     var validarCues = function(data){
         var existe = data
         if(existe === true){
@@ -213,16 +283,21 @@ var app = (function(){
         }
     }
 
+    /*
+    Se muestra la sala de espera y realiza un get de los usuarios
+    */
     function cargarWait(){
         $("#codigoJugar").empty();
         $("#codigoJugar").append(sessionStorage.getItem("codigoIngresadoV"))        
         $("#usuarios tbody").empty();
+        // console.log(user.getUsuario())
         apiclient.getUsuarios(usuarios)
     }
 
+    /*
+    Pinta una tabla con los usuarios ingresados
+    */
     var usuarios = function(data){
-        localStorage.setItem("uwu", data.length)
-        
             const datanew = data.map((elemento) =>{
                 return{
                     nickname: elemento.o1,
@@ -235,15 +310,19 @@ var app = (function(){
             });
     }
 
+
     function borrarUsu(nick){
-        stompClient.send("/app"+topico, {},JSON.stringify(nick))
+        alert("EN CONSTRUCCION")
+        //stompClient.send("/app"+topico, {},JSON.stringify(nick))
     }
+
 
     function setRtasSelec(str){
         apiclient.setRtasSelec(str);
     }
 
     function prueba(){
+        sessionStorage.setItem("ayudaP", true)
         document.getElementById('publico').style.display = 'none';
         setInterval(ayudaPubl, 1000)
     }
@@ -260,7 +339,6 @@ var app = (function(){
                 ejey[indice] = data[i].o2;
             }
         }
-        console.log(ejey)
         const grafica = document.querySelector("#grafica");
         const grafico = {
             label: "prueba",
@@ -291,42 +369,63 @@ var app = (function(){
         });
     };
 
+    /*
+    Realiza la primera conexion para entrar a la sala de espera
+    */
     var addToTopic = function(questik){
         stompClient.send("/app"+topico, {},JSON.stringify(questik));
     };
+
+
 
     var connectAndSubscribe = function () {
         console.info('Connecting to WS...');
         var socket = new SockJS('/stompendpoint');
         stompClient = Stomp.over(socket);
-        
-        //subscribe to /topic/TOPICXX when connections succeed
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
             stompClient.subscribe("/topic"+topico, function (eventbody) {
                 if(eventbody.body==="nextQuestion"){
-                    if(localStorage.getItem("global")==0){                      
-                        //sessionStorage.setItem("bandera",1)
+                    if(sessionStorage.getItem("global")==0){ 
+                        sessionStorage.setItem("Url",document.referrer.split('/')[3])                   
                         window.location="game.html"
+                    }else if(sessionStorage.getItem("global")==1){
+                        getPregunta()
                     }
                 }
                 if(eventbody.body==="puntos"){
-                    adminNextQ();
-                    //accionSiguientePregunta();
+                    accionSiguientePregunta();
+                    sessionStorage.setItem("global",1)
                     getPuntajes();
-                }else{
+                }
+                if(eventbody.body==="pausar"){
+                    if(sessionStorage.getItem("preguntaCarrera") == 1){
+                        sessionStorage.setItem("preguntaCarrera",2)
+                        cambiarColor();
+                    }else if(sessionStorage.getItem("preguntaCarrera") == 2){
+                        sessionStorage.setItem("preguntaCarrera",1)
+                        cambiarColorActivado()
+                    }
+                }
+                else{
                     cargarWait();
                 }
             })
         });
     };
 
+    /*
+    Realiza un get de los puntajes de cada jugador
+    */
     function getPuntajes(){
         $("#puntajesA tbody").empty()
         apiclient.getPuntajes(showScore);
         
     }
 
+    /*
+    Pinta la tabla de puntajes de todos los jugadores
+    */
     var showScore = function(data){
         console.log(data)
         const datanew = data.map((element) =>{
@@ -341,25 +440,16 @@ var app = (function(){
         })
     }
 
-    // function disconnect() {
-    //     if (stompClient !== null) {
-    //         stompClient.disconnect();
-    //     }
-    //     // stompClient.setConnected(false);
-    //     console.log("Disconnected");
-    // }
-
     return{
         getPregunta:getPregunta,
         siguientePregunta:siguientePregunta,
-        getNombres: getNombres,
+        getNombresCuestionarios: getNombresCuestionarios,
         entrarCues: entrarCues,
         revisarResp:revisarResp,
         revisarCues:revisarCues,
         cargarWait:cargarWait,
         ayudaPubl: ayudaPubl,
         borrarUsu:borrarUsu,
-        ayudaPubl: ayudaPubl,
         next: next,
         prueba: prueba,
         getPuntajes: getPuntajes,
@@ -369,6 +459,8 @@ var app = (function(){
             var questik = sessionStorage.getItem("codigoIngresadoV");
             topico = "/newquestik."+questik;
             connectAndSubscribe();
+            sessionStorage.setItem("bandera",0);
+            sessionStorage.setItem("global",0);
             setTimeout(()=>{addToTopic(questik);},1000)
         },
 

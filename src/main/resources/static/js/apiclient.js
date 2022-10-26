@@ -49,8 +49,29 @@ var apiclient = (function(){
             callback(
                 JSON.parse($.ajax({type: 'GET', url: 'questiksTemp/bandera', async: false}).responseText)
             )
-        }
+        },
 
+        revisarResp: function(str, preguntaActual){
+            var link = str + "/" + preguntaActual
+            return JSON.parse($.ajax({type: 'GET', url: 'questiksTemp/' + link, async: false}).responseText)
+        },
+
+        revisarCarrera: function(str, preguntaActual){
+            var link = str + "/" + preguntaActual + "/c"
+            return JSON.parse($.ajax({type: 'GET', url: 'questiksTemp/' + link, async: false}).responseText)
+        },
+
+        actualizarPuntajes: function(nickname){
+            // var datos = JSON.stringify(nickname)
+            $.ajax({type: 'PUT', url: 'questiksTemp/', data: nickname, contentType: "application/json"})
+        },
+
+        deleteAll: function(){
+            $.ajax({
+                url: 'questiksTemp/',
+                type: 'DELETE'
+            })
+        }
         
     }
 })();
