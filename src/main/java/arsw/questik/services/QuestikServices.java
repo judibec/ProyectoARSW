@@ -84,7 +84,7 @@ public class QuestikServices {
     public boolean revisarCarrera(int preguntaActual, String str) throws QuestikNotFoundException{
         boolean resp = false;
         synchronized(activo){
-            System.out.println(activo.get());
+            // System.out.println(activo.get());
             if(activo.get() == 0){
                 activo.set(1);
                 resp = questikPersistence.revisarResp(preguntaActual, str);

@@ -102,7 +102,6 @@ var app = (function(){
         ejex = [];
         if(data.pregunta != undefined){
             document.getElementById("pregunta").innerHTML = data.pregunta;
-            // localStorage.setItem("tipoPregunta", data.tipo);
             sessionStorage.setItem("tipoPregunta", data.tipo);
             if(sessionStorage.getItem("tipoPregunta")=='C'){
                 $("#pregunta").append(" <span style='color:red'>CARRERA</span>")
@@ -148,20 +147,6 @@ var app = (function(){
     /*
     Accion del boton de las respuestas, revisa si esta bien y se pinta de verde o rojo respectivo
     */
-    // function revisarResp(booleano, str){
-    //     $('.btn-respuesta').attr('disabled', true);
-    //     var botones = document.getElementsByClassName('btn-respuesta')
-    //     for (let i = 0; i<botones.length; i++){
-    //         botones[i].style.backgroundColor = '#14263a';
-    //     }
-    //     if(booleano === true){
-    //         document.getElementById(str).style.backgroundColor = '#2e8b77';
-    //     }else{
-    //         document.getElementById(str).style.backgroundColor = '#FF0000';
-    //     }
-    //     setRtasSelec(str)
-    // }
-
     function revisarResp(tipo, str){
         var data;
         var preguntaActual = sessionStorage.getItem("bandera")
@@ -239,13 +224,6 @@ var app = (function(){
         topico = "/newquestik."+questik;
         setTimeout(()=>{stompClient.send("/app/puntajes"+topico);},500)
     }
-
-    /*
-    llama a accionSiguientePregunta(?)
-    */
-    // function adminNextQ(){
-    //     accionSiguientePregunta();
-    // }
 
     /*
     Visualmente parece que cambiara de preguntas a puntajes 
