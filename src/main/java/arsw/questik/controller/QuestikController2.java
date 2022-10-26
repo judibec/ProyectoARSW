@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,6 +56,29 @@ public class QuestikController2 {
             return new ResponseEntity<>("Error",HttpStatus.NOT_FOUND);
         }
     }
+    
+    @RequestMapping(path = "/{str}/{preguntaActual}" ,method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> revisarResp(@PathVariable int preguntaActual, @PathVariable String str){
+        try{
+            boolean respuesta = questikServices.revisarResp(preguntaActual, str);
+            Gson gson = new Gson();
+            return new ResponseEntity<>(gson.toJson(respuesta), HttpStatus.ACCEPTED);
+        }catch(QuestikNotFoundException ex){
+            Logger.getLogger(QuestikController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>("Error",HttpStatus.NOT_FOUND);
+        }
+    }
 
+    @RequestMapping(path = "/{str}/{preguntaActual}/{bandera}" ,method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> revisarCarrera(@PathVariable int preguntaActual, @PathVariable String str){
+        try{
+            boolean respuesta = questikServices.revisarCarrera(preguntaActual, str);
+            Gson gson = new Gson();
+            return new ResponseEntity<>(gson.toJson(respuesta), HttpStatus.ACCEPTED);
+        }catch(QuestikNotFoundException ex){
+            Logger.getLogger(QuestikController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>("Error",HttpStatus.NOT_FOUND);
+        }
+    }
 
 }

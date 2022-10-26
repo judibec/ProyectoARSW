@@ -49,6 +49,16 @@ var apiclient = (function(){
             callback(
                 JSON.parse($.ajax({type: 'GET', url: 'questiksTemp/bandera', async: false}).responseText)
             )
+        },
+
+        revisarResp: function(str, preguntaActual){
+            var link = str + "/" + preguntaActual
+            return JSON.parse($.ajax({type: 'GET', url: 'questiksTemp/' + link, async: false}).responseText)
+        },
+
+        revisarCarrera: function(str, preguntaActual){
+            var link = str + "/" + preguntaActual + "/c"
+            return JSON.parse($.ajax({type: 'GET', url: 'questiksTemp/' + link, async: false}).responseText)
         }
 
         

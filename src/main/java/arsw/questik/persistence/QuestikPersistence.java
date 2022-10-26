@@ -33,5 +33,7 @@ public interface QuestikPersistence {
 
     public ArrayList<Tuple> getUsurios() throws QuestikNotFoundException;
 
+    public boolean revisarResp(int preguntaActual, String str) throws QuestikNotFoundException;
+
 
 }

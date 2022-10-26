@@ -38,7 +38,7 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
         respuestas.add(r2);
         respuestas.add(r3);
         respuestas.add(r4);
-        Pregunta p = new Pregunta(1, "pregunta", respuestas,'M', 5);
+        Pregunta p = new Pregunta(1, "pregunta", respuestas,'M', 3);
         List<Pregunta> ps = new ArrayList<Pregunta>();
         ps.add(p);
         //________________________________________
@@ -47,7 +47,7 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
         List<Respuesta> respuestas3 = new ArrayList<Respuesta>();
         respuestas3.add(r9);
         respuestas3.add(r0);
-        Pregunta p3 = new Pregunta(2, "pregunta2", respuestas3,'F', 10);
+        Pregunta p3 = new Pregunta(2, "pregunta2", respuestas3,'F', 3);
         ps.add(p3);
         //________________________________________
         Respuesta r10 = new Respuesta("BECERRA", false);
@@ -59,9 +59,20 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
         respuestas4.add(r11);
         respuestas4.add(r12);
         respuestas4.add(r13);
-        Pregunta p4 = new Pregunta(3, "Hola", respuestas4,'M', 15);
+        Pregunta p4 = new Pregunta(3, "Hola", respuestas4,'M', 3);
         ps.add(p4);
-
+        //________________________________________
+        Respuesta r14 = new Respuesta("QUÉ", false);
+        Respuesta r15 = new Respuesta("COMO", false);
+        Respuesta r16 = new Respuesta("QUE", false);
+        Respuesta r17 = new Respuesta("NO?", true);
+        List<Respuesta> respuestas5 = new ArrayList<Respuesta>();
+        respuestas5.add(r14);
+        respuestas5.add(r15);
+        respuestas5.add(r16);
+        respuestas5.add(r17);
+        Pregunta p5 = new Pregunta(4, "AHHHH con razón tuurururururu", respuestas5,'C', 20);
+        ps.add(p5);
         Cuestionario c = new Cuestionario("nombre", 12345, ps);
         questiks.put(12345, c);
 
@@ -220,6 +231,24 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
             
         });
         return usuar;
+    }
+
+    @Override
+    public boolean revisarResp(int preguntaActual, String str) throws QuestikNotFoundException {
+        ArrayList<Pregunta> pregs = questiks.get(cuestSelec).getPregunta();
+        ArrayList<Respuesta> rtas = new ArrayList<>();
+        boolean bandera = false;
+        for(Pregunta pregunta: pregs){
+            if(pregunta.getCodigo() == preguntaActual){
+                rtas = pregunta.getRespuestas();
+            }
+        }
+        for(Respuesta respuesta: rtas){
+            if(respuesta.getRespuesta().equals(str)){
+                bandera = respuesta.getCorrecta();
+            }
+        }
+        return bandera;
     }
 
 

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ public class QuestikServices {
 
     @Autowired
     QuestikPersistence questikPersistence;
+    AtomicInteger activo = new AtomicInteger(0);
 
     public Set<Cuestionario> getCuestionario(int codigo) throws QuestikNotFoundException{
         return questikPersistence.getCuestionario(codigo);
@@ -72,4 +75,42 @@ public class QuestikServices {
         return questikPersistence.getUsurios();
     }
 
+    public boolean revisarResp(int preguntaActual, String str) throws QuestikNotFoundException {
+        return questikPersistence.revisarResp(preguntaActual, str);
+    }
+
+    // private synchronized void esperar(){
+    //     activo.set(1);
+    // }
+
+    // private synchronized void activar(){
+    //     activo.set(false);
+    //     notifyAll();
+    // }
+
+    public boolean revisarCarrera(int preguntaActual, String str) throws QuestikNotFoundException{
+        boolean resp = false;
+        synchronized(activo){
+            if(activo.get() == 0){
+                // esperar();
+                activo.set(1);
+                // activo.set(true);
+                resp = questikPersistence.revisarResp(preguntaActual, str);
+                if(!resp){
+                    // activar();
+                    activo.set(0);
+                }else{
+                    activo.set(2);
+                }
+            }
+            // else if(activo.get() == 2){
+            //     try {
+            //         wait();
+            //     } catch (InterruptedException e) {
+            //         e.printStackTrace();
+            //     }
+            // }
+            return resp;
+        }
+    }
 }
