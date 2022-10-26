@@ -124,6 +124,7 @@ var app = (function(){
             x.style.display = "none";
             y.style.display = "none";
             z.style.display = "block";
+            apiclient.deleteAll();
         }
     }
 
@@ -333,7 +334,8 @@ var app = (function(){
 
 
     function borrarUsu(nick){
-        stompClient.send("/app"+topico, {},JSON.stringify(nick))
+        alert("EN CONSTRUCCION")
+        //stompClient.send("/app"+topico, {},JSON.stringify(nick))
     }
 
 

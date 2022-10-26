@@ -252,6 +252,12 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
     }
 
     @Override
+    public void deleteAll() {
+        usuarios.clear();
+        
+    }
+
+    @Override
     public void actualizarPuntajes(String nickname) throws QuestikNotFoundException {
         for(Usuario usuario:usuarios){
             if(usuario.getNickname().equals(nickname)){

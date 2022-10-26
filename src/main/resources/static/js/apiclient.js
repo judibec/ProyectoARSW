@@ -64,6 +64,13 @@ var apiclient = (function(){
         actualizarPuntajes: function(nickname){
             // var datos = JSON.stringify(nickname)
             $.ajax({type: 'PUT', url: 'questiksTemp/', data: nickname, contentType: "application/json"})
+        },
+
+        deleteAll: function(){
+            $.ajax({
+                url: 'questiksTemp/',
+                type: 'DELETE'
+            })
         }
         
     }

@@ -37,5 +37,7 @@ public interface QuestikPersistence {
 
     public void actualizarPuntajes(String nickname) throws QuestikNotFoundException;
 
+    public void deleteAll();
+
 
 }

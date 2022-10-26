@@ -102,4 +102,8 @@ public class QuestikServices {
     public void actualizarPuntajes(String nickname) throws QuestikNotFoundException {
         questikPersistence.actualizarPuntajes(nickname);
     }
+
+    public void deleteAll() {
+        questikPersistence.deleteAll();
+    }
 }
