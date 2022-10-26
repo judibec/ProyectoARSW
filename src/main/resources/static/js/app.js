@@ -122,6 +122,7 @@ var app = (function(){
             x.style.display = "none";
             y.style.display = "none";
             z.style.display = "block";
+            apiclient.deleteAll();
         }
     }
 
@@ -287,8 +288,6 @@ var app = (function(){
     Pinta una tabla con los usuarios ingresados
     */
     var usuarios = function(data){
-        localStorage.setItem("uwu", data.length)
-        
             const datanew = data.map((elemento) =>{
                 return{
                     nickname: elemento.o1,
@@ -303,7 +302,8 @@ var app = (function(){
 
 
     function borrarUsu(nick){
-        stompClient.send("/app"+topico, {},JSON.stringify(nick))
+        alert("EN CONSTRUCCION")
+        //stompClient.send("/app"+topico, {},JSON.stringify(nick))
     }
 
 

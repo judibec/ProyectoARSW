@@ -35,5 +35,7 @@ public interface QuestikPersistence {
 
     public boolean revisarResp(int preguntaActual, String str) throws QuestikNotFoundException;
 
+    public void deleteAll();
+
 
 }

@@ -251,6 +251,12 @@ public class QuestikPersistenceImpl implements QuestikPersistence{
         return bandera;
     }
 
+    @Override
+    public void deleteAll() {
+        usuarios.clear();
+        
+    }
+
 
 
     

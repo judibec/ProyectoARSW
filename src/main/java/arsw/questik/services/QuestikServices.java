@@ -113,4 +113,8 @@ public class QuestikServices {
             return resp;
         }
     }
+
+    public void deleteAll() {
+        questikPersistence.deleteAll();
+    }
 }

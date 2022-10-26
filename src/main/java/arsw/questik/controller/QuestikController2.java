@@ -81,4 +81,10 @@ public class QuestikController2 {
         }
     }
 
+    @RequestMapping(method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteAll(){
+        questikServices.deleteAll();
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
 }

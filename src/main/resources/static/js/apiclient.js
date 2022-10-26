@@ -59,6 +59,13 @@ var apiclient = (function(){
         revisarCarrera: function(str, preguntaActual){
             var link = str + "/" + preguntaActual + "/c"
             return JSON.parse($.ajax({type: 'GET', url: 'questiksTemp/' + link, async: false}).responseText)
+        },
+
+        deleteAll: function(){
+            $.ajax({
+                url: 'questiksTemp/',
+                type: 'DELETE'
+            })
         }
 
         
