@@ -59,8 +59,12 @@ var apiclient = (function(){
         revisarCarrera: function(str, preguntaActual){
             var link = str + "/" + preguntaActual + "/c"
             return JSON.parse($.ajax({type: 'GET', url: 'questiksTemp/' + link, async: false}).responseText)
-        }
+        },
 
+        actualizarPuntajes: function(nickname){
+            // var datos = JSON.stringify(nickname)
+            $.ajax({type: 'PUT', url: 'questiksTemp/', data: nickname, contentType: "application/json"})
+        }
         
     }
 })();

@@ -39,10 +39,12 @@ public class QuestikServices {
     }
 
     public Pregunta getPregunta(int codigo, int codigop) throws QuestikNotFoundException, InterruptedException{
+        activo.set(0);
         return questikPersistence.getPregunta(codigo,codigop);
     }
 
     public ArrayList<Respuesta> getRespuestas(int codigoc, int codigop) throws QuestikNotFoundException{
+        // activo.set(0);
         return questikPersistence.getRespuestas(codigoc,codigop);
 
     }
@@ -90,7 +92,9 @@ public class QuestikServices {
 
     public boolean revisarCarrera(int preguntaActual, String str) throws QuestikNotFoundException{
         boolean resp = false;
+        // System.out.println(activo.get());
         synchronized(activo){
+            System.out.println(activo.get());
             if(activo.get() == 0){
                 // esperar();
                 activo.set(1);
@@ -100,6 +104,7 @@ public class QuestikServices {
                     // activar();
                     activo.set(0);
                 }else{
+                    System.out.println("tabn");
                     activo.set(2);
                 }
             }
@@ -110,7 +115,12 @@ public class QuestikServices {
             //         e.printStackTrace();
             //     }
             // }
-            return resp;
+            
         }
+        return resp;
+    }
+
+    public void actualizarPuntajes(String nickname) throws QuestikNotFoundException {
+        questikPersistence.actualizarPuntajes(nickname);
     }
 }

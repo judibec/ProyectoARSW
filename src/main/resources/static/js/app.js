@@ -11,7 +11,6 @@ var app = (function(){
     var codCues = 0;
     var pregunta = 1;
     var numResp = 0;
-    let Url = 0;
 
     /*
     Realiza un get de los cuestionarios con su codigo
@@ -61,7 +60,7 @@ var app = (function(){
     /*
     Se activa al cargar el game.html, se conecta al socket y hace un get de las preguntas del cuestionario
     */
-    function getPregunta(){ 
+    function getPregunta(){
         if(sessionStorage.getItem("bandera") < 1){
             sessionStorage.setItem("bandera",1);
         }
@@ -172,6 +171,8 @@ var app = (function(){
             data = apiclient.revisarResp(str, preguntaActual);
             if(data){
                 document.getElementById(str).style.backgroundColor = '#2e8b77';
+                // console.log(sessionStorage.getItem("nickname"))
+                apiclient.actualizarPuntajes(sessionStorage.getItem("nickname"))
             }else{
                 document.getElementById(str).style.backgroundColor = '#FF0000';
             }
@@ -183,6 +184,7 @@ var app = (function(){
             data = apiclient.revisarCarrera(str, preguntaActual);
             if(data){
                 setTimeout(()=>{document.getElementById(str).style.backgroundColor = '#2e8b77';},1000)
+                apiclient.actualizarPuntajes(sessionStorage.getItem("nickname"))
             }else{
                 sessionStorage.setItem("preguntaCarrera",0)
                 setTimeout(()=>{document.getElementById(str).style.backgroundColor = '#FF0000';},1000)
@@ -245,6 +247,10 @@ var app = (function(){
     Visualmente parece que cambiara de preguntas a puntajes 
     */
     function accionSiguientePregunta(){
+        if(sessionStorage.getItem("Url")=="start.html"){
+            var btnnext = document.getElementById("btn-next");
+            btnnext.style.display = "block";
+        }
         var x = document.getElementById("juego");
         var y = document.getElementById("puntajes");
         y.style.display = "block";
@@ -256,9 +262,6 @@ var app = (function(){
     Cuando se activa el boton de los puntajes suma 1 al cod de la pregunta se conecta al socket y llama a getPregunta
     */
     function next(){
-        // var preg = sessionStorage.getItem("bandera")
-        // preg ++
-        // sessionStorage.setItem("bandera", preg)
         var questik = sessionStorage.getItem("codigoIngresadoV");
         topico = "/newquestik."+questik;
         setTimeout(()=>{stompClient.send("/app/siguientePregunta"+topico);},500)
@@ -400,7 +403,8 @@ var app = (function(){
             console.log('Connected: ' + frame);
             stompClient.subscribe("/topic"+topico, function (eventbody) {
                 if(eventbody.body==="nextQuestion"){
-                    if(sessionStorage.getItem("global")==0){                    
+                    if(sessionStorage.getItem("global")==0){ 
+                        sessionStorage.setItem("Url",document.referrer.split('/')[3])                   
                         window.location="game.html"
                     }else if(sessionStorage.getItem("global")==1){
                         getPregunta()

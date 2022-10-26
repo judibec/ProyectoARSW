@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -79,6 +80,17 @@ public class QuestikController2 {
             Logger.getLogger(QuestikController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>("Error",HttpStatus.NOT_FOUND);
         }
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> actualizarPuntajes(@RequestBody String nickname) throws QuestikNotFoundException{
+        // try{
+            questikServices.actualizarPuntajes(nickname);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        // }catch(QuestikNotFoundException ex){
+        //     Logger.getLogger(QuestikController.class.getName()).log(Level.SEVERE, null, ex);
+        //     return new ResponseEntity<>("Error",HttpStatus.NOT_FOUND);
+        // }
     }
 
 }
