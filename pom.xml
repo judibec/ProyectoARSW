@@ -93,12 +93,12 @@
         <configuration>
           <schemaVersion>v2</schemaVersion>
           <subscriptionId>c0b9492f-474e-4609-ace0-1d0c5fc0f1ed</subscriptionId>
-          <resourceGroup>questik-api-1669732146276-rg</resourceGroup>
-          <appName>questik-api-1669732146276</appName>
+          <resourceGroup>questik-api-1669770264047-rg</resourceGroup>
+          <appName>questik-api-1669770264047</appName>
           <pricingTier>P1v2</pricingTier>
           <region>centralus</region>
           <runtime>
-            <os>Windows</os>
+            <os>Linux</os>
             <javaVersion>Java 11</javaVersion>
             <webContainer>Java SE</webContainer>
           </runtime>
