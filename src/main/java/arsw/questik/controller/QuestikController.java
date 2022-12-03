@@ -1,7 +1,5 @@
 package arsw.questik.controller;
 
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 
-import arsw.questik.model.Cuestionario;
 import arsw.questik.model.Pregunta;
 import arsw.questik.model.Respuesta;
 
@@ -36,20 +33,6 @@ public class QuestikController {
     @Autowired
     QuestikServices questikServices;
 
-    // @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    // public ResponseEntity<?> getCuestionariosNombres(){
-    //     try{
-    //         List<Cuestionario> cuestionarios = questikServices.getCuestionarios();
-    //         List<String> nombres = new ArrayList<String>();
-    //         for(Cuestionario i: cuestionarios){
-    //             nombres.add(i.getNombre());
-    //         }
-    //         Gson gson = new Gson();
-    //         return new ResponseEntity<>(gson.toJson(cuestionarios), HttpStatus.ACCEPTED);
-    //     }catch(QuestikNotFoundException ex){
-    //         return new ResponseEntity<>("Error",HttpStatus.NOT_FOUND);
-    //     }
-    //   }
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getCuestionariosNombresCodigo(){
