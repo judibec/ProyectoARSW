@@ -100,9 +100,5 @@ public class QuestikController2 {
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("group1")
-    public String g1(){
-        return "hello";
-    }
 
 }
