@@ -49,5 +49,5 @@ jobs:
         with:
           app-name: 'questik-api-1669770264047'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E458C71CC1464B2DBFCBA5A0B0385E63 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_20C6ED6492AF4BF7807DAD6470189F8B }}
           package: '*.jar'
