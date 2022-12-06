@@ -63,11 +63,19 @@ var app = (function(){
         setTimeout(()=>{stompClient.send("/app/siguientePregunta"+topico);},1000)
     }
 
+
+    function salir(){
+        sessionStorage.clear()
+        localStorage.clear()
+        window.location="index.html"
+    }
+
     
     /*
     Se activa al cargar el game.html, se conecta al socket y hace un get de las preguntas del cuestionario
     */
     function getPregunta(){
+        localStorage.clear("admin_u")
         if(sessionStorage.getItem("bandera") < 1){
             sessionStorage.setItem("bandera",1);
         }
@@ -273,6 +281,7 @@ var app = (function(){
         }
         if(nickname && codigoIngresado){
             user.guardarUsuario(nickname);
+            localStorage.setItem("admin_u", "usuario");
             apiclient.revisarCues(nickname,codigoIngresado,validarCues);
         }
     }
@@ -461,6 +470,7 @@ var app = (function(){
         prueba: prueba,
         getPuntajes: getPuntajes,
         empezar:empezar,
+        salir:salir,
         
         connect: function(){
             if(localStorage.getItem("admin_u") === null){
