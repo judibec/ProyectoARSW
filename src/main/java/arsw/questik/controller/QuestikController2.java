@@ -3,7 +3,6 @@ package arsw.questik.controller;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentHashMap.KeySetView;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,7 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -85,13 +83,8 @@ public class QuestikController2 {
 
     @RequestMapping(method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> actualizarPuntajes(@RequestBody String nickname) throws QuestikNotFoundException{
-        // try{
             questikServices.actualizarPuntajes(nickname);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
-        // }catch(QuestikNotFoundException ex){
-        //     Logger.getLogger(QuestikController.class.getName()).log(Level.SEVERE, null, ex);
-        //     return new ResponseEntity<>("Error",HttpStatus.NOT_FOUND);
-        // }
     }
 
     @RequestMapping(method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)

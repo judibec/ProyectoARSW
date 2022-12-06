@@ -1,11 +1,9 @@
 package arsw.questik.services;
 
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +28,6 @@ public class QuestikServices {
         return questikPersistence.getCuestionario(codigo);
     }
 
-    // public List<Cuestionario> getCuestionarios() throws QuestikNotFoundException {
-    //     return questikPersistence.getCuestionarios();
-    // }
-
     public ArrayList<Tuple> getCuestionarios() throws QuestikNotFoundException {
         return questikPersistence.getCuestionarios();
     }
@@ -44,7 +38,6 @@ public class QuestikServices {
     }
 
     public ArrayList<Respuesta> getRespuestas(int codigoc, int codigop) throws QuestikNotFoundException{
-        // activo.set(0);
         return questikPersistence.getRespuestas(codigoc,codigop);
 
     }
@@ -84,14 +77,12 @@ public class QuestikServices {
     public boolean revisarCarrera(int preguntaActual, String str) throws QuestikNotFoundException{
         boolean resp = false;
         synchronized(activo){
-            // System.out.println(activo.get());
             if(activo.get() == 0){
                 activo.set(1);
                 resp = questikPersistence.revisarResp(preguntaActual, str);
                 if(!resp){
                     activo.set(0);
                 }else{
-                    // System.out.println("tabn");
                     activo.set(2);
                 }
             }
