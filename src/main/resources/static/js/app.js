@@ -461,7 +461,7 @@ var app = (function(){
             connectAndSubscribe();
             sessionStorage.setItem("bandera",0);
             sessionStorage.setItem("global",0);
-            setTimeout(()=>{addToTopic(questik);},1000)
+            setTimeout(()=>{addToTopic(questik);},1500)
         },
 
         disconnect: function () {

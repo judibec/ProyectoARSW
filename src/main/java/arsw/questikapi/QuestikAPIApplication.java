@@ -10,4 +10,5 @@ public class QuestikAPIApplication {
     public static void main(String[] args){
         SpringApplication.run(QuestikAPIApplication.class,args);
     }
+    
 }
