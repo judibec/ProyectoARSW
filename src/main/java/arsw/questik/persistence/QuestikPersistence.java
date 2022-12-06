@@ -1,6 +1,5 @@
 package arsw.questik.persistence;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;

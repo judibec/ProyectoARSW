@@ -1,7 +1,6 @@
 package arsw.questik.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Cuestionario {
@@ -12,7 +11,6 @@ public class Cuestionario {
     public Cuestionario(String nombre,int codigo, List<Pregunta> prgtas){
         this.nombre=nombre;
         this.codigo=codigo;
-        //List<Pregunta> preguntatest = Arrays.asList(prgtas);
         this.preguntas = new ArrayList<>(prgtas);
     }
 

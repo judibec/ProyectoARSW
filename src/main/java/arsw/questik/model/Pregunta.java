@@ -1,7 +1,6 @@
 package arsw.questik.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Pregunta {
@@ -15,7 +14,6 @@ public class Pregunta {
     public Pregunta(int codigo, String pregunta, List<Respuesta> rtas, char tipo, int tiempo){
         this.codigo=codigo;
         this.pregunta=pregunta;
-        //List<Respuesta> respuestatest = Arrays.asList(rtas);
         this.respuestas = new ArrayList<>(rtas);
         this.tipo = tipo;
         this.tiempo= tiempo;

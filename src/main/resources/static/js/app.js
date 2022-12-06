@@ -1,3 +1,4 @@
+
 var apiclient = apiclient;
 var app = (function(){
     var intervalo;
@@ -16,13 +17,19 @@ var app = (function(){
     Realiza un get de los cuestionarios con su codigo
     */
     function getNombresCuestionarios(){
-        apiclient.getCuestionariosNombres(poblarTablaCuestionarios);
+        if(localStorage.getItem("admin_u") === null){
+            window.location = "index.html"
+        }else{
+            apiclient.getCuestionariosNombres(poblarTablaCuestionarios);    
+        }
+        
     }
 
     /*
     Pinta una tabla con el nombre de cada cuestionario
     */
     var poblarTablaCuestionarios = function(data){
+        console.log(data);
         const datanew = data.map((elemento) =>{
             return{
                 codigo: elemento.o1,
@@ -56,11 +63,19 @@ var app = (function(){
         setTimeout(()=>{stompClient.send("/app/siguientePregunta"+topico);},1000)
     }
 
+
+    function salir(){
+        sessionStorage.clear()
+        localStorage.clear()
+        window.location="index.html"
+    }
+
     
     /*
     Se activa al cargar el game.html, se conecta al socket y hace un get de las preguntas del cuestionario
     */
     function getPregunta(){
+        localStorage.clear("admin_u")
         if(sessionStorage.getItem("bandera") < 1){
             sessionStorage.setItem("bandera",1);
         }
@@ -266,6 +281,7 @@ var app = (function(){
         }
         if(nickname && codigoIngresado){
             user.guardarUsuario(nickname);
+            localStorage.setItem("admin_u", "usuario");
             apiclient.revisarCues(nickname,codigoIngresado,validarCues);
         }
     }
@@ -454,14 +470,19 @@ var app = (function(){
         prueba: prueba,
         getPuntajes: getPuntajes,
         empezar:empezar,
+        salir:salir,
         
         connect: function(){
-            var questik = sessionStorage.getItem("codigoIngresadoV");
-            topico = "/newquestik."+questik;
-            connectAndSubscribe();
-            sessionStorage.setItem("bandera",0);
-            sessionStorage.setItem("global",0);
-            setTimeout(()=>{addToTopic(questik);},1000)
+            if(localStorage.getItem("admin_u") === null){
+                window.location = "index.html"
+            }else{
+                var questik = sessionStorage.getItem("codigoIngresadoV");
+                topico = "/newquestik."+questik;
+                connectAndSubscribe();
+                sessionStorage.setItem("bandera",0);
+                sessionStorage.setItem("global",0);
+                setTimeout(()=>{addToTopic(questik);},1000);
+            }
         },
 
         disconnect: function () {
