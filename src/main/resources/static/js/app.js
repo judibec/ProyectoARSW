@@ -1,3 +1,4 @@
+
 var apiclient = apiclient;
 var app = (function(){
     var intervalo;
@@ -16,13 +17,19 @@ var app = (function(){
     Realiza un get de los cuestionarios con su codigo
     */
     function getNombresCuestionarios(){
-        apiclient.getCuestionariosNombres(poblarTablaCuestionarios);
+        if(localStorage.getItem("admin_u") === null){
+            window.location = "index.html"
+        }else{
+            apiclient.getCuestionariosNombres(poblarTablaCuestionarios);    
+        }
+        
     }
 
     /*
     Pinta una tabla con el nombre de cada cuestionario
     */
     var poblarTablaCuestionarios = function(data){
+        console.log(data);
         const datanew = data.map((elemento) =>{
             return{
                 codigo: elemento.o1,
@@ -456,12 +463,16 @@ var app = (function(){
         empezar:empezar,
         
         connect: function(){
-            var questik = sessionStorage.getItem("codigoIngresadoV");
-            topico = "/newquestik."+questik;
-            connectAndSubscribe();
-            sessionStorage.setItem("bandera",0);
-            sessionStorage.setItem("global",0);
-            setTimeout(()=>{addToTopic(questik);},1500)
+            if(localStorage.getItem("admin_u") === null){
+                window.location = "index.html"
+            }else{
+                var questik = sessionStorage.getItem("codigoIngresadoV");
+                topico = "/newquestik."+questik;
+                connectAndSubscribe();
+                sessionStorage.setItem("bandera",0);
+                sessionStorage.setItem("global",0);
+                setTimeout(()=>{addToTopic(questik);},1000);
+            }
         },
 
         disconnect: function () {
